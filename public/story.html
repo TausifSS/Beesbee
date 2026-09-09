@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Our Story & Purity — BeesBee Pure Honey</title>
+  <meta name="description" content="Discover the BeesBee mission: ethical forest honey collection, 0% added sugar, and absolute transparency from hive to home.">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            honey: { 50: '#FFFDF5', 500: '#F59E0B', 600: '#D97706', 700: '#B45309', 800: '#92400E' },
+            forest: { 800: '#1B4332', 900: '#122E22' },
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            serifbrand: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body class="bg-[#FAF7F2] text-[#2B1810] antialiased safe-bottom-padding">
+
+  <div id="toast-container"></div>
+
+  <!-- Announcement Bar -->
+  <div class="bg-[#1B4332] text-amber-100/90 text-xs font-medium py-1.5 px-4 text-center tracking-wide flex items-center justify-center gap-2">
+    <span>🍃 Pure. Natural. Honest.</span>
+    <span>•</span>
+    <span>From Hive to Home</span>
+    <span>•</span>
+    <span class="bg-emerald-700 text-amber-200 text-[10px] font-bold px-2 py-0.5 rounded-full">NMR Lab Certified 🛡️</span>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#EDE7DB]">
+    <div class="max-w-6xl mx-auto px-4 py-2.5 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <button type="button" onclick="openSidebar()" class="p-2 rounded-xl text-stone-700 hover:bg-stone-100 lg:hidden">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <a href="index.html" class="flex items-center gap-2">
+          <img src="assets/images/logo_clean.png" alt="BeesBee" class="h-9 sm:h-11 object-contain" />
+        </a>
+      </div>
+
+      <nav class="hidden lg:flex items-center gap-6 text-xs font-bold text-stone-700">
+        <a href="index.html" class="nav-link hover:text-amber-600">Home</a>
+        <a href="shop.html" class="nav-link hover:text-amber-600">Shop Honey</a>
+        <a href="offers.html" class="nav-link hover:text-amber-600">Special Offers</a>
+        <a href="harvest.html" class="nav-link hover:text-amber-600">Behind the Honey</a>
+        <a href="story.html" class="nav-link text-[#D97706] font-extrabold">Our Story</a>
+        <a href="orders.html" class="nav-link hover:text-amber-600">Track Order</a>
+        <a href="contact.html" class="nav-link hover:text-amber-600">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="openCartDrawer()" class="p-2 rounded-xl text-stone-700 hover:bg-stone-100 relative">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span class="cart-count-badge hidden absolute -top-1 -right-1 bg-[#D97706] text-white text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    <div class="max-w-3xl mx-auto text-center">
+      <span class="text-xs font-bold text-[#1B4332] bg-emerald-100 px-3 py-1 rounded-full uppercase tracking-wider">
+        From Nature to Your Home
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-bold font-serif-brand text-stone-900 mt-3 leading-tight">
+        Why We Started BeesBee
+      </h1>
+      <p class="text-sm sm:text-base text-stone-600 mt-3 leading-relaxed">
+        Over 80% of commercial honey found on supermarket shelves today is adulterated with corn syrup, sugar blends, or heated to unnatural temperatures that kill every live enzyme. We set out to change that.
+      </p>
+    </div>
+
+    <!-- Story Visual Banner -->
+    <div class="mt-8 rounded-3xl overflow-hidden border border-stone-200 shadow-sm relative">
+      <img src="assets/images/hero_banner_wide.png" alt="BeesBee Story" class="w-full object-cover max-h-72" />
+    </div>
+
+    <!-- 4 Pillars Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
+      <div class="bg-white p-6 rounded-3xl border border-stone-200 shadow-xs">
+        <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-2xl flex items-center justify-center text-2xl mb-3">🍃</div>
+        <h3 class="font-bold text-lg text-stone-900 font-heading">Wild Floral Nectar Only</h3>
+        <p class="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
+          Our bees forage freely across deep mountain valleys and untouched wildflower canopies. We never feed our bees refined sugar syrups or artificial chemical supplements.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-3xl border border-stone-200 shadow-xs">
+        <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-2xl flex items-center justify-center text-2xl mb-3">🛡️</div>
+        <h3 class="font-bold text-lg text-stone-900 font-heading">NMR Tested Authenticity</h3>
+        <p class="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
+          Every harvest batch is subjected to Nuclear Magnetic Resonance (NMR) testing to verify zero sugar syrup adulteration, ensuring only 100% genuine floral honey touches your spoon.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-3xl border border-stone-200 shadow-xs">
+        <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-2xl flex items-center justify-center text-2xl mb-3">🐝</div>
+        <h3 class="font-bold text-lg text-stone-900 font-heading">Bee-First Ethics</h3>
+        <p class="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
+          Honeybees are vital pollinators for our planet's ecosystem. We collect only genuine excess honey from mature hives, ensuring bee colonies remain healthy and well-stocked throughout the year.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-3xl border border-stone-200 shadow-xs">
+        <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-2xl flex items-center justify-center text-2xl mb-3">🫙</div>
+        <h3 class="font-bold text-lg text-stone-900 font-heading">Zero Plastic Packaging</h3>
+        <p class="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
+          Honey is naturally mildly acidic. Cheap plastic squeeze bottles can leach chemicals over time. BeesBee packages exclusively in food-grade, heavy glass jars that seal in natural goodness.
+        </p>
+      </div>
+    </div>
+
+    <!-- Final CTA -->
+    <div class="mt-12 bg-gradient-to-r from-[#1B4332] to-[#122E22] rounded-3xl p-8 text-center text-white">
+      <h3 class="text-2xl sm:text-3xl font-bold font-serif-brand text-amber-200">
+        Taste What Real Honey Feels Like
+      </h3>
+      <p class="text-xs sm:text-sm text-emerald-100 max-w-md mx-auto mt-2">
+        Zero preservatives, zero corn syrup, zero processing. Pure honey, straight from nature.
+      </p>
+      <div class="mt-6">
+        <a href="shop.html" class="honey-gradient-btn font-extrabold text-xs py-3 px-8 rounded-xl shadow-lg inline-flex items-center gap-2">
+          <span>Explore Bottle Sizes</span>
+          <span>➔</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-[#2B1810] text-amber-100/80 pt-8 pb-20 text-xs text-center border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-4">
+      <p class="text-[11px] text-stone-400">© 2026 BeesBee. All Rights Reserved. 100% Raw Forest Honey.</p>
+    </div>
+  </footer>
+
+  <!-- Include Global Modals -->
+  <div id="checkout-modal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-backdrop flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-2xl border border-stone-200 max-h-[92vh] overflow-y-auto bottom-sheet">
+      <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+        <h3 class="font-bold text-base text-stone-900 font-heading">Complete Delivery Details</h3>
+        <button type="button" onclick="closeCheckoutModal()" class="text-stone-400 text-lg">✕</button>
+      </div>
+      <div id="checkout-order-preview" class="my-3"></div>
+      <div class="space-y-3">
+        <input type="text" id="checkout-name" placeholder="Full Name *" class="w-full text-xs p-2.5 rounded-xl border border-stone-300 outline-none" />
+        <input type="tel" id="checkout-phone" placeholder="WhatsApp Phone Number *" class="w-full text-xs p-2.5 rounded-xl border border-stone-300 outline-none" />
+        <div class="p-3 bg-amber-50/80 rounded-2xl border border-amber-200/80">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-[#92400E]">📍 Mandatory Delivery GPS</span>
+            <span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">Required</span>
+          </div>
+          <button type="button" id="gps-action-btn" onclick="handleCaptureGPS()" class="w-full bg-[#D97706] text-white font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-2">
+            Get Current Location (GPS)
+          </button>
+          <div id="gps-status-indicator" class="hidden mt-2"></div>
+        </div>
+        <input type="text" id="checkout-house" placeholder="House / Flat / Building *" class="w-full text-xs p-2.5 rounded-xl border border-stone-300 outline-none" />
+        <input type="text" id="checkout-area" placeholder="Area / Street *" class="w-full text-xs p-2.5 rounded-xl border border-stone-300 outline-none" />
+        <div class="grid grid-cols-2 gap-2">
+          <input type="text" id="checkout-landmark" placeholder="Landmark (Optional)" class="w-full text-xs p-2.5 rounded-xl border border-stone-300" />
+          <input type="text" id="checkout-pincode" placeholder="Pincode" class="w-full text-xs p-2.5 rounded-xl border border-stone-300" />
+        </div>
+        <input type="hidden" id="checkout-city"><input type="hidden" id="checkout-state">
+      </div>
+      <div class="mt-4 pt-3 border-t border-stone-200">
+        <div class="flex justify-between items-center text-sm font-bold text-stone-900 mb-3">
+          <span>Total:</span>
+          <span id="checkout-total-display" class="text-lg text-emerald-800 font-extrabold">₹0</span>
+        </div>
+        <button type="button" onclick="handleSubmitOrder()" class="w-full whatsapp-btn text-white font-extrabold text-sm py-3.5 rounded-2xl flex items-center justify-center gap-2">
+          ORDER ON WHATSAPP
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cart-drawer" class="hidden fixed inset-0 z-50 overflow-hidden modal-backdrop flex justify-end">
+    <div class="bg-white w-full max-w-md h-full flex flex-col p-5 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+        <h3 class="font-bold text-base text-stone-900 font-heading">Your Honey Basket</h3>
+        <button onclick="closeCartDrawer()" class="text-stone-400 text-lg">✕</button>
+      </div>
+      <div id="cart-items-list" class="flex-1 overflow-y-auto py-3 space-y-2.5"></div>
+      <div id="cart-summary-section" class="border-t border-stone-200 pt-3 space-y-2">
+        <div class="flex justify-between text-xs"><span>Subtotal:</span><span id="cart-subtotal-text" class="font-bold">₹0</span></div>
+        <div class="flex justify-between text-xs text-emerald-700"><span>Savings:</span><span id="cart-savings-text" class="font-bold">₹0</span></div>
+        <div class="flex justify-between text-base font-extrabold text-stone-900 border-t pt-1"><span>Total:</span><span id="cart-total-text" class="text-amber-800">₹0</span></div>
+        <button onclick="openCartCheckoutModal()" class="w-full honey-gradient-btn font-extrabold text-sm py-3 rounded-xl mt-2">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Sidebar -->
+  <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 modal-backdrop flex">
+    <div class="bg-[#FAF7F2] w-72 h-full p-5 shadow-2xl flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center pb-4 border-b border-stone-200">
+          <img src="assets/images/logo_clean.png" alt="BeesBee" class="h-8 object-contain" />
+          <button onclick="closeSidebar()" class="text-stone-400 text-lg">✕</button>
+        </div>
+        <nav class="mt-4 space-y-1 text-xs font-bold text-stone-800">
+          <a href="index.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>🏠</span> Home</a>
+          <a href="shop.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>🍯</span> Shop Honey</a>
+          <a href="offers.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>🎁</span> Special Offers</a>
+          <a href="harvest.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>🎥</span> Behind the Honey</a>
+          <a href="story.html" class="flex items-center gap-3 p-2.5 rounded-xl bg-amber-100/60 text-amber-800"><span>🍃</span> Our Story</a>
+          <a href="orders.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>📦</span> Track Orders</a>
+          <a href="contact.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>📞</span> Contact Us</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#EAE3D2] px-3 py-1 flex items-center justify-around shadow-lg">
+    <a href="index.html" class="flex flex-col items-center py-1 text-stone-600"><span class="text-lg">🏠</span><span class="text-[10px] font-bold">Home</span></a>
+    <a href="shop.html" class="flex flex-col items-center py-1 text-stone-600"><span class="text-lg">🍯</span><span class="text-[10px] font-bold">Shop</span></a>
+    <div class="flex flex-col items-center">
+      <button type="button" onclick="openDirectOrderModal('2kg')" class="floating-order-btn text-white focus:outline-none">
+        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.974.57 1.942.87 3.027.87 3.18 0 5.767-2.587 5.767-5.766.001-3.182-2.586-5.766-5.768-5.766z"/></svg>
+      </button>
+      <span class="text-[9px] font-extrabold text-[#1B4332] -mt-3.5">Order</span>
+    </div>
+    <a href="offers.html" class="flex flex-col items-center py-1 text-stone-600"><span class="text-lg">🎁</span><span class="text-[10px] font-bold">Offers</span></a>
+    <a href="orders.html" class="flex flex-col items-center py-1 text-stone-600"><span class="text-lg">📦</span><span class="text-[10px] font-bold">Orders</span></a>
+  </nav>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

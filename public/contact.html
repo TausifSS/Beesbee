@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Contact Us — BeesBee Pure Honey</title>
+  <meta name="description" content="Reach the BeesBee team directly on WhatsApp, phone, or email. We are happy to answer any questions about our raw honey.">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            honey: { 50: '#FFFDF5', 500: '#F59E0B', 600: '#D97706', 700: '#B45309', 800: '#92400E' },
+            forest: { 800: '#1B4332', 900: '#122E22' },
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            serifbrand: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body class="bg-[#FAF7F2] text-[#2B1810] antialiased safe-bottom-padding">
+
+  <div id="toast-container"></div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#EDE7DB]">
+    <div class="max-w-6xl mx-auto px-4 py-2.5 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <button type="button" onclick="openSidebar()" class="p-2 rounded-xl text-stone-700 hover:bg-stone-100 lg:hidden">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <a href="index.html" class="flex items-center gap-2">
+          <img src="assets/images/logo_clean.png" alt="BeesBee" class="h-9 sm:h-11 object-contain" />
+        </a>
+      </div>
+
+      <nav class="hidden lg:flex items-center gap-6 text-xs font-bold text-stone-700">
+        <a href="index.html" class="nav-link hover:text-amber-600">Home</a>
+        <a href="shop.html" class="nav-link hover:text-amber-600">Shop Honey</a>
+        <a href="offers.html" class="nav-link hover:text-amber-600">Special Offers</a>
+        <a href="harvest.html" class="nav-link hover:text-amber-600">Behind the Honey</a>
+        <a href="story.html" class="nav-link hover:text-amber-600">Our Story</a>
+        <a href="orders.html" class="nav-link hover:text-amber-600">Track Order</a>
+        <a href="contact.html" class="nav-link text-[#D97706] font-extrabold">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="openCartDrawer()" class="p-2 rounded-xl text-stone-700 hover:bg-stone-100 relative">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span class="cart-count-badge hidden absolute -top-1 -right-1 bg-[#D97706] text-white text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full uppercase tracking-wider">
+        We Are Here To Help
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold font-serif-brand text-stone-900 mt-2">
+        Get In Touch With BeesBee
+      </h1>
+      <p class="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed">
+        Have questions about our harvest, bulk orders, or your delivery? Reach us directly on WhatsApp for immediate answers.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Direct WhatsApp Card -->
+      <div class="bg-gradient-to-br from-[#1B4332] to-[#122E22] text-white p-6 sm:p-8 rounded-3xl shadow-lg flex flex-col justify-between">
+        <div>
+          <span class="bg-[#25D366] text-stone-950 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full">
+            Instant Support
+          </span>
+          <h3 class="text-2xl font-bold font-heading text-amber-200 mt-3">
+            WhatsApp Business Helpline
+          </h3>
+          <p class="text-xs text-emerald-100/90 mt-2 leading-relaxed">
+            Our team responds directly on WhatsApp. Whether you want to place a custom order, check bottle stock, or share feedback, we are just a message away.
+          </p>
+
+          <div class="mt-6 space-y-2 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-base">📱</span>
+              <span class="font-mono font-bold">+91 98765 43210</span>
+            </div>
+            <div class="flex items-center gap-2 text-stone-300">
+              <span class="text-base">⏰</span>
+              <span>Mon - Sun: 9:00 AM - 8:00 PM</span>
+            </div>
+            <div class="flex items-center gap-2 text-stone-300">
+              <span class="text-base">📍</span>
+              <span>Direct delivery across all pin codes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <a 
+            href="https://wa.me/919876543210?text=Hi%20BeesBee!%20I%20have%20an%20inquiry%20about%20your%20pure%20natural%20honey." 
+            target="_blank" 
+            class="whatsapp-btn font-extrabold text-xs py-3.5 px-6 rounded-2xl w-full flex items-center justify-center gap-2 text-white shadow-md">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.974.57 1.942.87 3.027.87 3.18 0 5.767-2.587 5.767-5.766.001-3.182-2.586-5.766-5.768-5.766z"/></svg>
+            <span>Start WhatsApp Chat</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Message Builder -->
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-sm flex flex-col justify-between">
+        <div>
+          <h3 class="text-xl font-bold font-heading text-stone-900">Send an Inquiry</h3>
+          <p class="text-xs text-stone-500 mt-1">Type your message below and we will open it directly in WhatsApp for you.</p>
+
+          <div class="mt-4 space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">Your Name</label>
+              <input type="text" id="contact-name" placeholder="e.g. Rahul Verma" class="w-full text-xs p-2.5 rounded-xl border border-stone-300 outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">Your Question or Requirement</label>
+              <textarea id="contact-msg" rows="4" placeholder="e.g. I want to inquire about bulk ordering 5kg for my family..." class="w-full text-xs p-2.5 rounded-xl border border-stone-300 outline-none resize-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <button 
+          type="button" 
+          onclick="handleQuickContact()" 
+          class="w-full honey-gradient-btn font-bold text-xs py-3.5 rounded-2xl shadow-sm mt-6 flex items-center justify-center gap-2">
+          <span>Send Question on WhatsApp</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-[#2B1810] text-amber-100/80 pt-8 pb-20 text-xs text-center border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-4">
+      <p class="text-[11px] text-stone-400">© 2026 BeesBee. All Rights Reserved. 100% Raw Forest Honey.</p>
+    </div>
+  </footer>
+
+  <div id="cart-drawer" class="hidden fixed inset-0 z-50 overflow-hidden modal-backdrop flex justify-end">
+    <div class="bg-white w-full max-w-md h-full flex flex-col p-5 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+        <h3 class="font-bold text-base text-stone-900 font-heading">Your Honey Basket</h3>
+        <button onclick="closeCartDrawer()" class="text-stone-400 text-lg">✕</button>
+      </div>
+      <div id="cart-items-list" class="flex-1 overflow-y-auto py-3 space-y-2.5"></div>
+      <div id="cart-summary-section" class="border-t border-stone-200 pt-3 space-y-2">
+        <div class="flex justify-between text-xs"><span>Subtotal:</span><span id="cart-subtotal-text" class="font-bold">₹0</span></div>
+        <div class="flex justify-between text-base font-extrabold text-stone-900 border-t pt-1"><span>Total:</span><span id="cart-total-text" class="text-amber-800">₹0</span></div>
+        <button onclick="window.location.href='shop.html'" class="w-full honey-gradient-btn font-extrabold text-sm py-3 rounded-xl mt-2">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Sidebar -->
+  <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 modal-backdrop flex">
+    <div class="bg-[#FAF7F2] w-72 h-full p-5 shadow-2xl flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center pb-4 border-b border-stone-200">
+          <img src="assets/images/logo_clean.png" alt="BeesBee" class="h-8 object-contain" />
+          <button onclick="closeSidebar()" class="text-stone-400 text-lg">✕</button>
+        </div>
+        <nav class="mt-4 space-y-1 text-xs font-bold text-stone-800">
+          <a href="index.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>🏠</span> Home</a>
+          <a href="shop.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>🍯</span> Shop Honey</a>
+          <a href="offers.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>🎁</span> Special Offers</a>
+          <a href="harvest.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>🎥</span> Behind the Honey</a>
+          <a href="story.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>🍃</span> Our Story</a>
+          <a href="orders.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60"><span>📦</span> Track Orders</a>
+          <a href="contact.html" class="flex items-center gap-3 p-2.5 rounded-xl bg-amber-100/60 text-amber-800"><span>📞</span> Contact Us</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#EAE3D2] px-3 py-1 flex items-center justify-around shadow-lg">
+    <a href="index.html" class="flex flex-col items-center py-1 text-stone-600"><span class="text-lg">🏠</span><span class="text-[10px] font-bold">Home</span></a>
+    <a href="shop.html" class="flex flex-col items-center py-1 text-stone-600"><span class="text-lg">🍯</span><span class="text-[10px] font-bold">Shop</span></a>
+    <div class="flex flex-col items-center">
+      <button type="button" onclick="window.location.href='shop.html'" class="floating-order-btn text-white focus:outline-none">
+        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.974.57 1.942.87 3.027.87 3.18 0 5.767-2.587 5.767-5.766.001-3.182-2.586-5.766-5.768-5.766z"/></svg>
+      </button>
+      <span class="text-[9px] font-extrabold text-[#1B4332] -mt-3.5">Order</span>
+    </div>
+    <a href="offers.html" class="flex flex-col items-center py-1 text-stone-600"><span class="text-lg">🎁</span><span class="text-[10px] font-bold">Offers</span></a>
+    <a href="orders.html" class="flex flex-col items-center py-1 text-stone-600"><span class="text-lg">📦</span><span class="text-[10px] font-bold">Orders</span></a>
+  </nav>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    function handleQuickContact() {
+      const name = document.getElementById("contact-name").value.trim() || "Customer";
+      const query = document.getElementById("contact-msg").value.trim();
+      if (!query) {
+        showToast("Please enter your message or question", "error");
+        return;
+      }
+      const phone = window.BEESBEE_CONFIG.brand.whatsappNumber;
+      const text = `Hi BeesBee! 🍯 My name is ${name}.\n\nInquiry: ${query}`;
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, "_blank");
+    }
+  </script>
+</body>
+</html>
