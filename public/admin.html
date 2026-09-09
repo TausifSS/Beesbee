@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeesBee — Merchant Admin Console</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body class="bg-[#F4F1EA] text-[#2B1810] min-h-screen">
+
+  <!-- AUTHENTICATION SCREEN -->
+  <div id="admin-auth-screen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-sm w-full bg-white rounded-3xl p-6 shadow-xl border border-stone-200 text-center">
+      <img src="assets/images/logo_clean.png" alt="BeesBee" class="h-10 mx-auto object-contain mb-4" />
+      <h2 class="text-lg font-bold font-heading text-stone-900">Admin Control Center</h2>
+      <p class="text-xs text-stone-500 mt-1">Authorized personnel only</p>
+
+      <div class="mt-4 text-left">
+        <label class="block text-xs font-bold text-stone-700 mb-1">Passcode / PIN</label>
+        <input 
+          type="password" 
+          id="admin-passcode" 
+          placeholder="Enter Passcode" 
+          class="w-full text-sm p-3 rounded-xl border border-stone-300 focus:border-amber-500 outline-none text-center tracking-widest font-mono"
+        />
+        <p class="text-[10px] text-stone-400 mt-1 text-center">Default PIN: <code class="bg-stone-100 px-1 py-0.5 rounded font-bold">beesbee2026</code></p>
+      </div>
+
+      <button 
+        type="button" 
+        onclick="verifyAdminPasscode()" 
+        class="w-full honey-gradient-btn font-bold text-xs py-3 rounded-xl mt-4">
+        Unlock Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN ADMIN DASHBOARD -->
+  <div id="admin-dashboard" class="hidden min-h-screen flex flex-col">
+    <!-- Admin Header -->
+    <header class="bg-white border-b border-stone-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30">
+      <div class="flex items-center gap-3">
+        <img src="assets/images/logo_clean.png" alt="BeesBee" class="h-8 object-contain" />
+        <span class="text-xs font-bold bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full">
+          Store Operations
+        </span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="index.html" target="_blank" class="text-xs font-semibold text-stone-600 hover:text-amber-700 underline">
+          View Live Store ↗
+        </a>
+        <button onclick="adminLogout()" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold px-3 py-1.5 rounded-lg">
+          Lock
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="bg-white border-b border-stone-200 px-6 flex gap-4 text-xs font-bold overflow-x-auto no-scrollbar">
+      <button onclick="switchAdminTab('orders')" id="tab-btn-orders" class="py-3 border-b-2 border-amber-600 text-amber-700">
+        📦 Orders & Tracking (<span id="orders-count-badge">0</span>)
+      </button>
+      <button onclick="switchAdminTab('products')" id="tab-btn-products" class="py-3 border-b-2 border-transparent text-stone-500 hover:text-stone-900">
+        🍯 Products & Pricing
+      </button>
+      <button onclick="switchAdminTab('offers')" id="tab-btn-offers" class="py-3 border-b-2 border-transparent text-stone-500 hover:text-stone-900">
+        🎁 Promotional Offers
+      </button>
+      <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="py-3 border-b-2 border-transparent text-stone-500 hover:text-stone-900">
+        ⚙️ WhatsApp & Store Settings
+      </button>
+    </div>
+
+    <!-- Main View Content -->
+    <div class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6">
+      
+      <!-- TAB 1: ORDERS -->
+      <div id="view-orders" class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-stone-200 shadow-xs">
+          <div>
+            <h3 class="font-bold text-base text-stone-900">Live Customer Orders</h3>
+            <p class="text-xs text-stone-500">Orders placed on WhatsApp with mandatory GPS coordinates</p>
+          </div>
+          <div class="flex gap-2">
+            <input 
+              type="text" 
+              id="order-search-filter" 
+              oninput="filterAdminOrders()"
+              placeholder="Search by Order ID or Phone..." 
+              class="text-xs p-2 rounded-xl border border-stone-300 outline-none w-64"
+            />
+          </div>
+        </div>
+
+        <div id="admin-orders-list" class="space-y-3"></div>
+      </div>
+
+      <!-- TAB 2: PRODUCTS -->
+      <div id="view-products" class="hidden space-y-4">
+        <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs">
+          <h3 class="font-bold text-base text-stone-900">Manage Honey Bottle Sizes & Prices</h3>
+          <p class="text-xs text-stone-500 mt-0.5">Quickly adjust bottle prices and in-stock status</p>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4" id="admin-products-container"></div>
+        </div>
+      </div>
+
+      <!-- TAB 3: OFFERS -->
+      <div id="view-offers" class="hidden space-y-4">
+        <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs">
+          <h3 class="font-bold text-base text-stone-900">Active Promotional Offers</h3>
+          <div id="admin-offers-container" class="mt-4 space-y-3"></div>
+        </div>
+      </div>
+
+      <!-- TAB 4: SETTINGS -->
+      <div id="view-settings" class="hidden space-y-4">
+        <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-xs max-w-lg">
+          <h3 class="font-bold text-base text-stone-900">Store & WhatsApp Settings</h3>
+          <div class="mt-4 space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">WhatsApp Business Number</label>
+              <input type="text" id="setting-whatsapp" class="w-full text-xs p-2.5 rounded-xl border border-stone-300" />
+              <span class="text-[10px] text-stone-400">Include country code without '+' (e.g. 919876543210)</span>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">Business Support Email</label>
+              <input type="text" id="setting-email" class="w-full text-xs p-2.5 rounded-xl border border-stone-300" />
+            </div>
+            <button onclick="saveAdminSettings()" class="honey-gradient-btn font-bold text-xs py-2.5 px-6 rounded-xl mt-2">
+              Save Settings
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/orders.js"></script>
+  <script>
+    const VALID_PIN = "beesbee2026";
+
+    function verifyAdminPasscode() {
+      const pin = document.getElementById("admin-passcode").value;
+      if (pin === VALID_PIN) {
+        document.getElementById("admin-auth-screen").classList.add("hidden");
+        document.getElementById("admin-dashboard").classList.remove("hidden");
+        loadAdminData();
+      } else {
+        alert("Invalid passcode. Please try again.");
+      }
+    }
+
+    function adminLogout() {
+      document.getElementById("admin-auth-screen").classList.remove("hidden");
+      document.getElementById("admin-dashboard").classList.add("hidden");
+      document.getElementById("admin-passcode").value = "";
+    }
+
+    function switchAdminTab(tabName) {
+      ['orders', 'products', 'offers', 'settings'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add("hidden");
+        const btn = document.getElementById(`tab-btn-${t}`);
+        btn.classList.remove("border-amber-600", "text-amber-700");
+        btn.classList.add("border-transparent", "text-stone-500");
+      });
+
+      document.getElementById(`view-${tabName}`).classList.remove("hidden");
+      const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+      activeBtn.classList.remove("border-transparent", "text-stone-500");
+      activeBtn.classList.add("border-amber-600", "text-amber-700");
+    }
+
+    function loadAdminData() {
+      renderAdminOrders();
+      renderAdminProducts();
+      renderAdminOffers();
+      
+      document.getElementById("setting-whatsapp").value = window.BEESBEE_CONFIG.brand.whatsappNumber;
+      document.getElementById("setting-email").value = window.BEESBEE_CONFIG.brand.email;
+    }
+
+    function renderAdminOrders() {
+      const orders = window.ordersManager.getOrders();
+      document.getElementById("orders-count-badge").textContent = orders.length;
+      const container = document.getElementById("admin-orders-list");
+
+      if (orders.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white p-8 text-center rounded-2xl border border-stone-200 text-stone-500 text-xs">
+            No orders placed yet. Place a test order from the store to see it live here!
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orders.map(o => `
+        <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-2 border-b border-stone-100 gap-2">
+            <div class="flex items-center gap-2">
+              <span class="font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded text-xs">${o.orderId}</span>
+              <span class="text-xs text-stone-500">${new Date(o.createdAt).toLocaleString()}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-stone-700">Status:</span>
+              <select onchange="updateStatus('${o.orderId}', this.value)" class="text-xs p-1.5 rounded-lg border border-stone-300 font-bold bg-white outline-none">
+                <option value="Order Placed on WhatsApp" ${o.status.includes('Placed') ? 'selected' : ''}>Order Placed</option>
+                <option value="Confirmed" ${o.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                <option value="Preparing & Bottling" ${o.status.includes('Preparing') ? 'selected' : ''}>Preparing & Bottling</option>
+                <option value="Out for Delivery" ${o.status.includes('Out') ? 'selected' : ''}>Out for Delivery</option>
+                <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div>
+              <div class="font-bold text-stone-800">👤 Customer</div>
+              <div class="text-stone-600 mt-1">${o.customer.name}</div>
+              <div class="text-emerald-700 font-mono font-bold">📱 ${o.customer.phone}</div>
+            </div>
+
+            <div>
+              <div class="font-bold text-stone-800">📍 Delivery Address & GPS</div>
+              <div class="text-stone-600 mt-1">${o.address.houseNo}, ${o.address.area}</div>
+              ${o.address.gps ? `
+                <a href="${o.address.gps.mapsUrl}" target="_blank" class="text-emerald-700 font-bold underline inline-flex items-center gap-1 mt-1">
+                  <span>Open Google Maps Pin 🗺️</span>
+                </a>
+              ` : ''}
+            </div>
+
+            <div>
+              <div class="font-bold text-stone-800">🍯 Items & Total</div>
+              <div class="text-stone-600 mt-1">
+                ${o.items.map(i => `<div>• ${i.size} × ${i.quantity} = ₹${i.subtotal}</div>`).join('')}
+                ${o.freeGifts.length > 0 ? `<div class="text-emerald-700 font-bold">🎁 FREE: 250g Bonus Jar</div>` : ''}
+                <div class="font-extrabold text-stone-900 mt-1">Total: ₹${o.totalAmount}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function updateStatus(orderId, newStatus) {
+      window.ordersManager.updateOrderStatus(orderId, newStatus);
+      alert(`Updated ${orderId} to: ${newStatus}`);
+      renderAdminOrders();
+    }
+
+    function renderAdminProducts() {
+      const product = window.BEESBEE_PRODUCTS[0];
+      const container = document.getElementById("admin-products-container");
+      container.innerHTML = product.sizes.map(s => `
+        <div class="p-3.5 border border-stone-200 rounded-xl bg-stone-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <img src="${s.image}" class="w-10 h-10 object-contain" />
+            <div>
+              <div class="font-bold text-xs text-stone-900">BeesBee Honey (${s.size})</div>
+              <div class="text-[11px] text-stone-500">${s.tagline}</div>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-extrabold text-amber-800">₹${s.price}</span>
+            <span class="text-[10px] text-stone-400 block line-through">₹${s.originalPrice}</span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderAdminOffers() {
+      const offers = window.BEESBEE_CONFIG.offers;
+      const container = document.getElementById("admin-offers-container");
+      container.innerHTML = offers.map(off => `
+        <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-bold bg-emerald-800 text-white px-2 py-0.5 rounded">${off.badge}</span>
+            <h4 class="font-bold text-xs text-stone-900 mt-1">${off.headline}</h4>
+            <p class="text-[11px] text-emerald-800">${off.rewardText}</p>
+          </div>
+          <span class="text-xs font-bold text-emerald-700 bg-white px-2.5 py-1 rounded-lg border border-emerald-200">
+            Active
+          </span>
+        </div>
+      `).join("");
+    }
+
+    function saveAdminSettings() {
+      const wp = document.getElementById("setting-whatsapp").value.trim();
+      const email = document.getElementById("setting-email").value.trim();
+      window.BEESBEE_CONFIG.brand.whatsappNumber = wp;
+      window.BEESBEE_CONFIG.brand.email = email;
+      alert("Settings saved successfully!");
+    }
+  </script>
+</body>
+</html>

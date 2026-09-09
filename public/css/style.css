@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+:root {
+  --honey-primary: #D97706;
+  --honey-dark: #92400E;
+  --honey-light: #FDE68A;
+  --honey-bg: #FAF7F2;
+  --honey-card: #FFFFFF;
+  --honey-brown: #2B1810;
+  --honey-green: #1B4332;
+  --honey-green-light: #E8F5E9;
+  --border-soft: #EDE8DE;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--honey-bg);
+  color: var(--honey-brown);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, .font-heading {
+  font-family: 'Outfit', sans-serif;
+}
+
+.font-serif-brand {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF7F2;
+}
+::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+  border-radius: 999px;
+}
+
+/* Safe area padding for mobile notches and bottom nav */
+.safe-bottom-padding {
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* Honey Glow & Gradients */
+.honey-glow {
+  box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.25), 0 8px 10px -6px rgba(217, 119, 6, 0.2);
+}
+
+.honey-card-shadow {
+  box-shadow: 0 4px 20px -2px rgba(43, 24, 16, 0.06);
+}
+
+.honey-gradient-btn {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: #ffffff;
+  transition: all 0.25s ease;
+}
+.honey-gradient-btn:hover {
+  background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+  transform: translateY(-1px);
+}
+.honey-gradient-btn:active {
+  transform: scale(0.98);
+}
+
+/* WhatsApp Brand Button */
+.whatsapp-btn {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff;
+  box-shadow: 0 8px 20px -4px rgba(37, 211, 102, 0.35);
+  transition: all 0.25s ease;
+}
+.whatsapp-btn:hover {
+  background: linear-gradient(135deg, #22BF5B 0%, #0F7569 100%);
+  transform: translateY(-1px);
+}
+.whatsapp-btn:active {
+  transform: scale(0.97);
+}
+
+/* Size Badge Selector */
+.size-pill {
+  transition: all 0.2s ease;
+  border: 1.5px solid var(--border-soft);
+  cursor: pointer;
+}
+.size-pill.active {
+  border-color: #D97706;
+  background-color: #FEF3C7;
+  color: #92400E;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15);
+}
+
+/* Bottom Sheet / Modal transitions */
+.modal-backdrop {
+  background-color: rgba(28, 25, 23, 0.6);
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s ease;
+}
+
+.bottom-sheet {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Pulse animation for special offers */
+@keyframes honeyPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+.animate-honey-pulse {
+  animation: honeyPulse 3s infinite ease-in-out;
+}
+
+/* Floating WhatsApp Nav Action */
+.floating-order-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1B4332 0%, #25D366 100%);
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+  position: relative;
+  top: -18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.floating-order-btn:hover {
+  transform: scale(1.08) translateY(-2px);
+}
+.floating-order-btn:active {
+  transform: scale(0.95);
+}
+
+/* Toast Notifications */
+#toast-container {
+  position: fixed;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+  width: 90%;
+  max-width: 400px;
+}
+
+.toast {
+  pointer-events: auto;
+  background: #2B1810;
+  color: #FFFFFF;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: toastSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes toastSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide scrollbar for category pills / horizontal scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
