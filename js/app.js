@@ -1,6 +1,6 @@
 /**
  * BEESBEE - Main Application UI Orchestrator
- * Pure Natural Honey Storefront & Multi-Page Manager
+ * Pure Natural Honey Storefront
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,57 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initApp() {
-  setupNavbarActiveState();
-  updateCartBadge();
+  renderProductCards();
+  renderSpecialOffers();
+  renderVideoSection();
   setupEventListeners();
-
-  // Page-specific initializations
-  if (document.getElementById("products-grid")) {
-    renderProductCards();
-  }
-  if (document.getElementById("offers-container")) {
-    renderSpecialOffers();
-  }
-  if (document.getElementById("video-showcase-container")) {
-    renderVideoSection();
-  }
-  if (document.getElementById("dedicated-orders-list")) {
-    renderDedicatedOrdersPage();
-  }
-  if (document.getElementById("dedicated-offers-list")) {
-    renderDedicatedOffersPage();
-  }
-  if (document.getElementById("dedicated-harvest-container")) {
-    renderDedicatedHarvestPage();
-  }
-
+  updateCartBadge();
   setupProfileData();
-}
-
-/**
- * Highlight active navbar link based on current page filename
- */
-function setupNavbarActiveState() {
-  const currentPath = window.location.pathname.split("/").pop() || "index.html";
-  const navLinks = document.querySelectorAll(".nav-link");
-  
-  navLinks.forEach(link => {
-    const href = link.getAttribute("href");
-    if (href === currentPath || (currentPath === "" && href === "index.html") || (currentPath === "index.html" && href === "index.html")) {
-      link.classList.add("text-[#D97706]", "font-extrabold");
-      link.classList.remove("text-stone-700");
-    }
-  });
-
-  // Highlight bottom nav active tab
-  const bottomNavItems = document.querySelectorAll(".bottom-nav-item");
-  bottomNavItems.forEach(item => {
-    const page = item.getAttribute("data-page");
-    if (page && currentPath.includes(page)) {
-      item.classList.add("text-[#D97706]");
-      item.classList.remove("text-stone-600");
-    }
-  });
 }
 
 /**
@@ -183,27 +138,29 @@ function renderProductCards(filterSize = null) {
 }
 
 /**
- * Render Special Offer Carousel / Banners on Home
+ * Render Special Offer Carousel / Banners
  */
 function renderSpecialOffers() {
   const container = document.getElementById("offers-container");
   if (!container) return;
 
+  const offers = window.BEESBEE_CONFIG.offers;
+
   container.innerHTML = `
     <!-- Main 2kg Hero Offer -->
-    <div class="bg-gradient-to-r from-[#1B3B28] via-[#244A34] to-[#1B3B28] rounded-2xl p-4 sm:p-5 text-white shadow-lg relative overflow-hidden border border-emerald-800">
+    <div class="bg-gradient-to-r from-[#1B3B28] via-[#244A34] to-[#1B3B28] rounded-2xl p-4 text-white shadow-lg relative overflow-hidden border border-emerald-800">
       <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-amber-500/10 rounded-full blur-xl pointer-events-none"></div>
 
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="flex-1 text-center sm:text-left">
           <div class="inline-block bg-amber-400 text-stone-900 font-extrabold text-[10px] tracking-wider px-2.5 py-0.5 rounded-full uppercase mb-2">
-            SPECIAL COMBO OFFER
+            SPECIAL OFFER
           </div>
           <h3 class="text-xl sm:text-2xl font-bold font-serif-brand text-amber-200">
             Buy 2kg Get 250g FREE!
           </h3>
           <p class="text-xs text-emerald-100/90 mt-1 font-medium">
-            More Honey. More Health. 100% Raw Forest Harvest with sterile glass packaging.
+            More Honey. More Health. 100% Raw Forest Harvest.
           </p>
 
           <div class="mt-3 flex items-center justify-center sm:justify-start gap-2">
@@ -223,84 +180,6 @@ function renderSpecialOffers() {
             class="w-full sm:w-auto bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-sm py-2.5 px-6 rounded-xl shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all">
             <span>Claim Offer on WhatsApp</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-          <a href="offers.html" class="text-xs text-amber-300 hover:underline font-semibold mt-1">
-            View All Combo Packs ➔
-          </a>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-/**
- * Render Dedicated Offers Page
- */
-function renderDedicatedOffersPage() {
-  const container = document.getElementById("dedicated-offers-list");
-  if (!container) return;
-
-  container.innerHTML = `
-    <!-- Offer 1: Family Combo -->
-    <div class="bg-white rounded-3xl p-6 border border-stone-200 honey-card-shadow flex flex-col md:flex-row items-center gap-6">
-      <div class="w-full md:w-1/3 bg-[#FAF7F2] rounded-2xl p-4 flex items-center justify-center">
-        <img src="assets/images/offer_banner.png" alt="Buy 2kg Get 250g Free" class="w-full max-h-56 object-contain rounded-xl" />
-      </div>
-      <div class="flex-1 text-center md:text-left">
-        <span class="bg-amber-100 text-[#92400E] font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">
-          🔥 Most Popular Family Offer
-        </span>
-        <h3 class="text-2xl font-bold font-heading text-stone-900 mt-2">
-          Family Honey Pack (2kg + 250g FREE)
-        </h3>
-        <p class="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
-          Order our largest 2kg Pure Forest Honey jar and receive an authentic 250g travel/desk jar completely FREE. Perfect for daily family breakfast and herbal teas.
-        </p>
-
-        <div class="flex items-baseline justify-center md:justify-start gap-3 mt-4">
-          <span class="text-3xl font-extrabold text-[#D97706]">₹1,199</span>
-          <span class="text-base text-stone-400 line-through">₹1,748</span>
-          <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-md">Save ₹549 Total</span>
-        </div>
-
-        <div class="mt-5 flex flex-col sm:flex-row gap-3">
-          <button onclick="openDirectOrderModal('2kg')" class="honey-gradient-btn font-bold text-xs py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-md">
-            <span>Order Family Combo on WhatsApp</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-          <button onclick="handleAddToCart('2kg')" class="bg-white border border-stone-300 text-stone-800 font-bold text-xs py-3 px-5 rounded-xl hover:bg-stone-50 transition-colors">
-            Add Combo to Cart
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Offer 2: Wellness Duo -->
-    <div class="bg-white rounded-3xl p-6 border border-stone-200 honey-card-shadow flex flex-col md:flex-row items-center gap-6 mt-6">
-      <div class="w-full md:w-1/3 bg-[#FAF7F2] rounded-2xl p-4 flex items-center justify-center">
-        <img src="assets/images/four_jars_full.jpg" alt="Wellness Duo" class="w-full max-h-56 object-contain rounded-xl" />
-      </div>
-      <div class="flex-1 text-center md:text-left">
-        <span class="bg-emerald-100 text-emerald-900 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">
-          🍃 Daily Immunity Pack
-        </span>
-        <h3 class="text-2xl font-bold font-heading text-stone-900 mt-2">
-          Wellness Duo (1kg Kitchen Jar + 500g Wellness Jar)
-        </h3>
-        <p class="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
-          Keep one large jar in the kitchen for cooking and daily lemon honey warm water, and one convenient 500g jar for your work desk.
-        </p>
-
-        <div class="flex items-baseline justify-center md:justify-start gap-3 mt-4">
-          <span class="text-3xl font-extrabold text-[#D97706]">₹899</span>
-          <span class="text-base text-stone-400 line-through">₹1,228</span>
-          <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-md">Save ₹329</span>
-        </div>
-
-        <div class="mt-5 flex flex-col sm:flex-row gap-3">
-          <button onclick="openDirectOrderModal('1kg')" class="honey-gradient-btn font-bold text-xs py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-md">
-            <span>Order Wellness Duo on WhatsApp</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </button>
         </div>
       </div>
@@ -328,13 +207,11 @@ function renderVideoSection() {
             See Where Your Honey Comes From
           </h3>
         </div>
-        <a href="harvest.html" class="text-xs font-bold text-amber-800 hover:underline">
-          Full Story ➔
-        </a>
+        <span class="text-2xl">🍯</span>
       </div>
 
       <!-- Video Preview Card -->
-      <div class="relative rounded-2xl overflow-hidden bg-stone-900 group shadow-md aspect-video max-h-[280px] flex items-center justify-center cursor-pointer" onclick="openVideoPlayerModal()">
+      <div class="relative rounded-2xl overflow-hidden bg-stone-900 group shadow-md aspect-video max-h-[260px] flex items-center justify-center cursor-pointer" onclick="openVideoPlayerModal()">
         <img 
           src="${vid.poster}" 
           alt="${vid.title}" 
@@ -387,56 +264,6 @@ function renderVideoSection() {
 }
 
 /**
- * Render Dedicated Behind the Honey Page
- */
-function renderDedicatedHarvestPage() {
-  const container = document.getElementById("dedicated-harvest-container");
-  if (!container) return;
-
-  container.innerHTML = `
-    <div class="space-y-8">
-      <!-- Step 1 -->
-      <div class="bg-white rounded-3xl p-6 border border-stone-200 honey-card-shadow flex flex-col md:flex-row items-center gap-6">
-        <div class="w-full md:w-1/2 aspect-video bg-stone-900 rounded-2xl overflow-hidden relative cursor-pointer group" onclick="openVideoPlayerModal()">
-          <img src="assets/images/video_banner.png" alt="Harvesting" class="w-full h-full object-cover group-hover:scale-105 transition-all" />
-          <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <div class="w-14 h-14 bg-amber-500 rounded-full flex items-center justify-center text-stone-900 shadow-xl group-hover:scale-110 transition-transform">
-              <svg class="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-          </div>
-        </div>
-        <div class="flex-1">
-          <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full uppercase">Step 01</span>
-          <h3 class="text-xl font-bold font-heading text-stone-900 mt-2">Ethical Colony Harvesting</h3>
-          <p class="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed">
-            Our traditional tribal harvesters never destroy hives or harm bee colonies. We carefully collect only the outer surplus honeycomb caps, leaving the queen and brood healthy and well-nourished.
-          </p>
-        </div>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="bg-white rounded-3xl p-6 border border-stone-200 honey-card-shadow flex flex-col md:flex-row-reverse items-center gap-6">
-        <div class="w-full md:w-1/2 aspect-video bg-stone-900 rounded-2xl overflow-hidden relative cursor-pointer group" onclick="openVideoPlayerModal()">
-          <img src="assets/images/hero_jar.png" alt="Cold Extraction" class="w-full h-full object-cover group-hover:scale-105 transition-all" />
-          <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <div class="w-14 h-14 bg-amber-500 rounded-full flex items-center justify-center text-stone-900 shadow-xl group-hover:scale-110 transition-transform">
-              <svg class="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-          </div>
-        </div>
-        <div class="flex-1">
-          <span class="text-xs font-bold text-amber-800 bg-amber-100 px-3 py-1 rounded-full uppercase">Step 02</span>
-          <h3 class="text-xl font-bold font-heading text-stone-900 mt-2">Zero-Heat Cold Filtration</h3>
-          <p class="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed">
-            Commercial honey is pasteurized at high heat, destroying valuable enzymes and natural aromatics. BeesBee uses gentle gravity straining through organic cotton mesh to remove wax fragments while preserving 100% of bee propolis and wild floral pollens.
-          </p>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-/**
  * Handle Add to Cart
  */
 function handleAddToCart(size) {
@@ -448,7 +275,7 @@ function handleAddToCart(size) {
 }
 
 /**
- * Update Cart Badge Count across header & bottom nav
+ * Update Cart Badge Count
  */
 function updateCartBadge() {
   const summary = window.cartManager.getSummary();
@@ -482,6 +309,7 @@ function openProductDetailModal(initialSize = "500g") {
   document.getElementById("modal-prod-original").textContent = `₹${sizeData.originalPrice}`;
   document.getElementById("modal-prod-tagline").textContent = sizeData.tagline;
 
+  // Render size pills inside modal
   const sizeContainer = document.getElementById("modal-size-pills");
   sizeContainer.innerHTML = product.sizes.map(s => `
     <button 
@@ -544,7 +372,7 @@ function openVideoPlayerModal() {
   const videoElement = document.getElementById("harvest-video-player");
   if (videoElement) {
     videoElement.src = vid.videoUrl;
-    videoElement.play().catch(e => console.log("Video autoplay caught:", e));
+    videoElement.play().catch(e => console.log("User interaction needed to play video:", e));
   }
 
   modal.classList.remove("hidden");
@@ -592,7 +420,7 @@ function renderCartDrawerContents() {
         </div>
         <h4 class="font-bold text-stone-800 text-base">Your honey basket is empty</h4>
         <p class="text-xs text-stone-500 mt-1">Add our pure, cold-extracted honey bottles to get started.</p>
-        <button onclick="closeCartDrawer(); window.location.href='shop.html'" class="mt-4 honey-gradient-btn text-xs font-bold py-2 px-5 rounded-xl">
+        <button onclick="closeCartDrawer()" class="mt-4 honey-gradient-btn text-xs font-bold py-2 px-5 rounded-xl">
           Shop Honey Now
         </button>
       </div>
@@ -617,18 +445,26 @@ function renderCartDrawerContents() {
         <div class="text-xs font-extrabold text-stone-900 mt-1">₹${item.price}</div>
       </div>
 
+      <!-- Stepper -->
       <div class="flex items-center border border-stone-300 rounded-lg bg-white">
-        <button onclick="handleCartQtyChange('${item.size}', ${item.quantity - 1})" class="px-2 py-0.5 text-xs text-stone-600 font-bold hover:bg-stone-100">-</button>
+        <button onclick="handleCartQtyChange('${item.size}', ${item.quantity - 1})" class="px-2 py-0.5 text-xs text-stone-600 font-bold hover:bg-stone-100">
+          -
+        </button>
         <span class="px-2 py-0.5 text-xs font-bold text-stone-800">${item.quantity}</span>
-        <button onclick="handleCartQtyChange('${item.size}', ${item.quantity + 1})" class="px-2 py-0.5 text-xs text-stone-600 font-bold hover:bg-stone-100">+</button>
+        <button onclick="handleCartQtyChange('${item.size}', ${item.quantity + 1})" class="px-2 py-0.5 text-xs text-stone-600 font-bold hover:bg-stone-100">
+          +
+        </button>
       </div>
     </div>
   `).join("");
 
+  // Show Free Gifts if applicable
   if (summary.freeGifts.length > 0) {
     html += summary.freeGifts.map(g => `
       <div class="flex items-center gap-3 p-2.5 bg-emerald-50 rounded-xl border border-emerald-200">
-        <div class="w-10 h-10 bg-emerald-100 text-emerald-800 rounded-lg flex items-center justify-center text-base font-bold">🎁</div>
+        <div class="w-10 h-10 bg-emerald-100 text-emerald-800 rounded-lg flex items-center justify-center text-base font-bold">
+          🎁
+        </div>
         <div class="flex-1">
           <div class="text-[11px] font-bold text-emerald-900">${g.name} (${g.size})</div>
           <div class="text-[10px] text-emerald-700 font-medium">Free Family Combo Special Gift</div>
@@ -640,6 +476,7 @@ function renderCartDrawerContents() {
 
   listContainer.innerHTML = html;
 
+  // Update summary numbers
   document.getElementById("cart-subtotal-text").textContent = `₹${summary.subtotal}`;
   document.getElementById("cart-savings-text").textContent = `₹${summary.savings}`;
   document.getElementById("cart-total-text").textContent = `₹${summary.finalTotal}`;
@@ -661,7 +498,7 @@ function handleRemoveCartItem(size) {
 /**
  * Checkout & Direct WhatsApp Order Modal
  */
-let directOrderProductContext = null;
+let directOrderProductContext = null; // null if checking out from cart, or { sizeData, quantity } if direct
 
 function openDirectOrderModal(size = "2kg") {
   const product = window.BEESBEE_PRODUCTS[0];
@@ -682,7 +519,7 @@ function openCartCheckoutModal() {
     showToast("Your honey basket is empty!", "error");
     return;
   }
-  directOrderProductContext = null;
+  directOrderProductContext = null; // Use Cart items
   closeCartDrawer();
   openCheckoutModalUI();
 }
@@ -691,6 +528,7 @@ function openCheckoutModalUI() {
   const modal = document.getElementById("checkout-modal");
   if (!modal) return;
 
+  // Populate preview item
   const itemPreview = document.getElementById("checkout-order-preview");
   if (directOrderProductContext) {
     const s = directOrderProductContext.sizeData;
@@ -721,6 +559,7 @@ function openCheckoutModalUI() {
     document.getElementById("checkout-total-display").textContent = `₹${summary.finalTotal}`;
   }
 
+  // Pre-fill profile if saved
   setupProfileData();
 
   modal.classList.remove("hidden");
@@ -773,6 +612,7 @@ function handleCaptureGPS() {
         </div>
       `;
 
+      // Auto-fill form fields
       if (location.area && !document.getElementById("checkout-area").value) {
         document.getElementById("checkout-area").value = location.area;
       }
@@ -830,33 +670,28 @@ function handleSubmitOrder() {
     return;
   }
 
+  // Success!
   closeCheckoutModal();
   updateCartBadge();
   showToast("Opening WhatsApp to confirm order... 🐝", "success");
 
+  // Open WhatsApp in new tab or direct window
   setTimeout(() => {
     window.open(result.whatsappUrl, "_blank");
   }, 300);
 
-  // If on orders page, refresh list; otherwise open drawer or redirect
-  if (document.getElementById("dedicated-orders-list")) {
-    renderDedicatedOrdersPage();
-  } else {
-    setTimeout(() => {
-      openOrdersDrawer();
-    }, 1000);
-  }
+  // Open the orders drawer to show the newly created order
+  setTimeout(() => {
+    openOrdersDrawer();
+  }, 1000);
 }
 
 /**
- * Orders Tracker Drawer & Dedicated Page
+ * Orders Tracker Drawer / View
  */
 function openOrdersDrawer() {
   const drawer = document.getElementById("orders-drawer");
-  if (!drawer) {
-    window.location.href = "orders.html";
-    return;
-  }
+  if (!drawer) return;
 
   renderOrdersList();
   drawer.classList.remove("hidden");
@@ -871,19 +706,8 @@ function closeOrdersDrawer() {
 
 function renderOrdersList() {
   const container = document.getElementById("orders-list-container");
-  if (!container) return;
   const orders = window.ordersManager.getOrders();
-  renderOrdersMarkup(container, orders);
-}
 
-function renderDedicatedOrdersPage() {
-  const container = document.getElementById("dedicated-orders-list");
-  if (!container) return;
-  const orders = window.ordersManager.getOrders();
-  renderOrdersMarkup(container, orders);
-}
-
-function renderOrdersMarkup(container, orders) {
   if (orders.length === 0) {
     container.innerHTML = `
       <div class="py-12 px-4 text-center">
@@ -892,9 +716,9 @@ function renderOrdersMarkup(container, orders) {
         </div>
         <h4 class="font-bold text-stone-800 text-base">No orders yet</h4>
         <p class="text-xs text-stone-500 mt-1">When you place an order on WhatsApp, it will be tracked here.</p>
-        <a href="shop.html" class="mt-4 honey-gradient-btn text-xs font-bold py-2 px-5 rounded-xl inline-block">
+        <button onclick="closeOrdersDrawer()" class="mt-4 honey-gradient-btn text-xs font-bold py-2 px-5 rounded-xl">
           Explore Pure Honey
-        </a>
+        </button>
       </div>
     `;
     return;
@@ -923,38 +747,50 @@ function renderOrdersMarkup(container, orders) {
           </span>
         </div>
 
+        <!-- Visual Stepper -->
         <div class="my-4">
           <div class="flex items-center justify-between relative">
             <div class="absolute left-3 right-3 top-1/2 -translate-y-1/2 h-1 bg-stone-200 -z-0"></div>
             <div class="absolute left-3 top-1/2 -translate-y-1/2 h-1 bg-emerald-600 -z-0 transition-all duration-500" style="width: ${(step - 1) * 25}%"></div>
 
             <div class="relative z-10 flex flex-col items-center">
-              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${step >= 1 ? 'bg-emerald-600 text-white' : 'bg-stone-300 text-stone-600'}">1</div>
+              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${step >= 1 ? 'bg-emerald-600 text-white' : 'bg-stone-300 text-stone-600'}">
+                1
+              </div>
               <span class="text-[9px] font-bold text-stone-600 mt-1">Placed</span>
             </div>
 
             <div class="relative z-10 flex flex-col items-center">
-              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${step >= 2 ? 'bg-emerald-600 text-white' : 'bg-stone-300 text-stone-600'}">2</div>
+              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${step >= 2 ? 'bg-emerald-600 text-white' : 'bg-stone-300 text-stone-600'}">
+                2
+              </div>
               <span class="text-[9px] font-bold text-stone-600 mt-1">Confirmed</span>
             </div>
 
             <div class="relative z-10 flex flex-col items-center">
-              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${step >= 3 ? 'bg-emerald-600 text-white' : 'bg-stone-300 text-stone-600'}">3</div>
+              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${step >= 3 ? 'bg-emerald-600 text-white' : 'bg-stone-300 text-stone-600'}">
+                3
+              </div>
               <span class="text-[9px] font-bold text-stone-600 mt-1">Preparing</span>
             </div>
 
             <div class="relative z-10 flex flex-col items-center">
-              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${step >= 4 ? 'bg-emerald-600 text-white' : 'bg-stone-300 text-stone-600'}">4</div>
+              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${step >= 4 ? 'bg-emerald-600 text-white' : 'bg-stone-300 text-stone-600'}">
+                4
+              </div>
               <span class="text-[9px] font-bold text-stone-600 mt-1">Delivery</span>
             </div>
 
             <div class="relative z-10 flex flex-col items-center">
-              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${step >= 5 ? 'bg-emerald-600 text-white' : 'bg-stone-300 text-stone-600'}">5</div>
+              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${step >= 5 ? 'bg-emerald-600 text-white' : 'bg-stone-300 text-stone-600'}">
+                5
+              </div>
               <span class="text-[9px] font-bold text-stone-600 mt-1">Enjoy</span>
             </div>
           </div>
         </div>
 
+        <!-- Items Summary -->
         <div class="text-xs text-stone-700 bg-[#FAF7F2] p-2.5 rounded-xl border border-stone-100">
           ${order.items.map(i => `<div class="flex justify-between"><span>• Pure Honey (${i.size}) × ${i.quantity}</span><span class="font-bold">₹${i.subtotal}</span></div>`).join("")}
           ${order.freeGifts.length > 0 ? `<div class="text-emerald-700 font-bold mt-1 text-[11px]">🎁 FREE: 250g Bonus Jar</div>` : ''}
@@ -964,11 +800,12 @@ function renderOrdersMarkup(container, orders) {
           </div>
         </div>
 
-        <div class="mt-3">
+        <!-- Contact Support for this Order -->
+        <div class="mt-3 flex gap-2">
           <a 
             href="${window.ordersManager.getWhatsAppInquiryUrl(order.orderId)}" 
             target="_blank"
-            class="w-full text-center bg-[#25D366]/10 text-emerald-800 hover:bg-[#25D366]/20 font-bold text-xs py-2 px-3 rounded-xl border border-emerald-300 transition-all flex items-center justify-center gap-1.5">
+            class="flex-1 text-center bg-[#25D366]/10 text-emerald-800 hover:bg-[#25D366]/20 font-bold text-xs py-2 px-3 rounded-xl border border-emerald-300 transition-all flex items-center justify-center gap-1.5">
             <span>Check Status on WhatsApp</span>
             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.974.57 1.942.87 3.027.87 3.18 0 5.767-2.587 5.767-5.766.001-3.182-2.586-5.766-5.768-5.766z"/></svg>
           </a>
@@ -978,25 +815,8 @@ function renderOrdersMarkup(container, orders) {
   }).join("");
 }
 
-function handleSearchOrderById() {
-  const input = document.getElementById("order-id-search-input");
-  if (!input) return;
-  const id = input.value.trim();
-  if (!id) {
-    showToast("Please enter an Order ID", "error");
-    return;
-  }
-  const order = window.ordersManager.getOrderById(id);
-  const container = document.getElementById("dedicated-orders-list") || document.getElementById("orders-list-container");
-  if (!order) {
-    showToast(`Order "${id}" not found on this device`, "error");
-    return;
-  }
-  renderOrdersMarkup(container, [order]);
-}
-
 /**
- * Pre-fill profile fields if previously saved
+ * Pre-fill profile fields if user previously saved details
  */
 function setupProfileData() {
   const profile = window.checkoutManager.getSavedProfile();
@@ -1135,6 +955,5 @@ function setupEventListeners() {
 
   window.addEventListener("beesbee:orders-updated", () => {
     renderOrdersList();
-    renderDedicatedOrdersPage();
   });
 }
