@@ -36,76 +36,75 @@ h1, h2, h3, .font-heading {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: #FAF7F2;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D4AF37;
+  background: #D97706;
   border-radius: 999px;
 }
 
-/* Safe area padding for mobile notches and bottom nav */
+/* Safe area padding for mobile bottom nav */
 .safe-bottom-padding {
-  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
 }
 
-/* Honey Glow & Gradients */
+/* Shadows & Glow */
 .honey-glow {
-  box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.25), 0 8px 10px -6px rgba(217, 119, 6, 0.2);
+  box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.25);
 }
 
 .honey-card-shadow {
-  box-shadow: 0 4px 20px -2px rgba(43, 24, 16, 0.06);
+  box-shadow: 0 4px 20px -2px rgba(43, 24, 16, 0.05);
 }
 
+/* Gradient Buttons */
 .honey-gradient-btn {
   background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
   color: #ffffff;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
 }
 .honey-gradient-btn:hover {
   background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
   transform: translateY(-1px);
 }
 .honey-gradient-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
-/* WhatsApp Brand Button */
+.forest-btn {
+  background: #1B4332;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+.forest-btn:hover {
+  background: #122E22;
+  transform: translateY(-1px);
+}
+.forest-btn:active {
+  transform: scale(0.97);
+}
+
 .whatsapp-btn {
   background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
   color: #ffffff;
-  box-shadow: 0 8px 20px -4px rgba(37, 211, 102, 0.35);
-  transition: all 0.25s ease;
+  box-shadow: 0 6px 18px -3px rgba(37, 211, 102, 0.35);
+  transition: all 0.2s ease;
 }
 .whatsapp-btn:hover {
   background: linear-gradient(135deg, #22BF5B 0%, #0F7569 100%);
   transform: translateY(-1px);
 }
 .whatsapp-btn:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
-/* Size Badge Selector */
-.size-pill {
-  transition: all 0.2s ease;
-  border: 1.5px solid var(--border-soft);
-  cursor: pointer;
-}
-.size-pill.active {
-  border-color: #D97706;
-  background-color: #FEF3C7;
-  color: #92400E;
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15);
-}
-
-/* Bottom Sheet / Modal transitions */
+/* Modal Backdrops & Bottom Sheets */
 .modal-backdrop {
-  background-color: rgba(28, 25, 23, 0.6);
+  background-color: rgba(28, 25, 23, 0.65);
   backdrop-filter: blur(4px);
   transition: opacity 0.3s ease;
 }
@@ -114,41 +113,7 @@ h1, h2, h3, .font-heading {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Pulse animation for special offers */
-@keyframes honeyPulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.03);
-  }
-}
-.animate-honey-pulse {
-  animation: honeyPulse 3s infinite ease-in-out;
-}
-
-/* Floating WhatsApp Nav Action */
-.floating-order-btn {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #1B4332 0%, #25D366 100%);
-  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
-  position: relative;
-  top: -18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.floating-order-btn:hover {
-  transform: scale(1.08) translateY(-2px);
-}
-.floating-order-btn:active {
-  transform: scale(0.95);
-}
-
-/* Toast Notifications */
+/* Toast Container */
 #toast-container {
   position: fixed;
   top: 1.25rem;
@@ -169,7 +134,7 @@ h1, h2, h3, .font-heading {
   color: #FFFFFF;
   padding: 0.75rem 1rem;
   border-radius: 999px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -178,21 +143,19 @@ h1, h2, h3, .font-heading {
   animation: toastSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 @keyframes toastSlideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Hide scrollbar for category pills / horizontal scroll */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+/* Bottom Nav Classic Active Indicator */
+.nav-tab.active {
+  color: #D97706;
 }
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.nav-tab.active svg {
+  stroke: #D97706;
+}
+
+/* PWA Install Banner */
+#pwa-install-banner {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
