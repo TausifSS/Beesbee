@@ -92,7 +92,7 @@
         <!-- Desktop Navigation -->
         <nav class="hidden md:flex items-center gap-5 text-xs font-bold text-stone-700">
           <button onclick="switchView('home')" class="hover:text-amber-600 transition-colors">Home</button>
-          <button onclick="scrollToProducts()" class="hover:text-amber-600 transition-colors">Shop Honey</button>
+          <button onclick="switchView('shop')" class="hover:text-amber-600 transition-colors">Shop Honey</button>
           <button onclick="switchView('offers')" class="hover:text-amber-600 transition-colors">Special Offers</button>
           <button onclick="switchView('orders')" class="hover:text-amber-600 transition-colors">Orders</button>
           <button onclick="openOurStoryModal()" class="hover:text-amber-600 transition-colors">Our Story</button>
@@ -153,32 +153,32 @@
     <!-- ---------------------------------------------------- -->
     <div id="view-home">
       
-      <!-- REAL INTERACTIVE HERO SECTION (No baked-in fake buttons!) -->
-      <section class="mt-3 sm:mt-5 rounded-3xl bg-gradient-to-b from-[#FFFDF9] via-[#FAF4E8] to-[#F5EEDF] border border-[#EDE4D3] p-5 sm:p-7 shadow-sm relative overflow-hidden">
-        <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
+      <!-- CLEAN HERO BANNER CARD (Matching Reference Style: Ivory container, clean typography, right emblem, no heavy photo) -->
+      <section class="mt-3 sm:mt-5 rounded-3xl bg-[#FAF6EE] border border-[#EDE4D0] p-5 sm:p-7 shadow-xs relative overflow-hidden">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-5">
           
-          <!-- Left Column: Real Live Content & Real Buttons -->
-          <div class="md:col-span-7 text-center md:text-left z-10">
+          <!-- Left Column: Clear Typography & Real Interactive Action -->
+          <div class="flex-1 text-center sm:text-left z-10">
             <div class="inline-block text-[11px] font-extrabold tracking-[0.2em] text-[#1B4332] uppercase mb-1">
               PURE • NATURAL • RAW • TRUSTED
             </div>
             
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-brand text-[#2B1810] leading-tight">
-              Nature’s <br class="hidden sm:inline" />
-              <span class="text-[#D97706]">Sweetest Gift</span>
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#1C1917] leading-tight">
+              Pure Honey Essentials <br />
+              <span class="text-[#1B4332]">For a Better Tomorrow</span>
             </h1>
 
-            <p class="text-xs sm:text-sm text-stone-600 mt-2 font-medium max-w-md mx-auto md:mx-0 leading-relaxed">
-              Real Honey. Real Goodness. Carefully collected from wild forest hives and delivered to your doorstep.
+            <p class="text-xs sm:text-sm text-stone-600 mt-2 font-medium max-w-md mx-auto sm:mx-0 leading-relaxed">
+              100% Pure Raw Honey • Naturally Collected • Fast Delivery to Your Door • Exciting Offers
             </p>
 
-            <!-- REAL Interactive Buttons -->
-            <div class="mt-5 flex items-center justify-center md:justify-start gap-3">
+            <!-- Interactive Action Buttons -->
+            <div class="mt-5 flex items-center justify-center sm:justify-start gap-3">
               <button 
                 type="button" 
-                onclick="scrollToProducts()"
-                class="bg-[#1B4332] hover:bg-[#122E22] text-white font-bold text-xs sm:text-sm py-2.5 sm:py-3 px-5 sm:px-6 rounded-full flex items-center gap-2 shadow-md active:scale-95 transition-all">
-                <span>Shop Pure Honey</span>
+                onclick="switchView('shop')"
+                class="bg-[#1B4332] hover:bg-[#122E22] text-white font-bold text-xs sm:text-sm py-2.5 sm:py-3 px-6 rounded-full flex items-center gap-2 shadow-md active:scale-95 transition-all">
+                <span>Shop Now</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
               </button>
 
@@ -189,45 +189,40 @@
                 <span>Our Story</span>
               </button>
             </div>
-
-            <!-- Real 4 Badges Bar (Classical SVG Icons) -->
-            <div class="grid grid-cols-4 gap-2 mt-6 max-w-md mx-auto md:mx-0">
-              <div class="bg-white/85 rounded-xl p-2 text-center border border-stone-200/70 shadow-2xs">
-                <div class="text-sm sm:text-base">🍃</div>
-                <div class="text-[9px] font-bold text-stone-800 mt-0.5">100% Natural</div>
-              </div>
-              <div class="bg-white/85 rounded-xl p-2 text-center border border-stone-200/70 shadow-2xs">
-                <div class="text-sm sm:text-base">🍯</div>
-                <div class="text-[9px] font-bold text-stone-800 mt-0.5">No Added Sugar</div>
-              </div>
-              <div class="bg-white/85 rounded-xl p-2 text-center border border-stone-200/70 shadow-2xs">
-                <div class="text-sm sm:text-base">🛡️</div>
-                <div class="text-[9px] font-bold text-stone-800 mt-0.5">Lab Tested</div>
-              </div>
-              <div class="bg-white/85 rounded-xl p-2 text-center border border-stone-200/70 shadow-2xs">
-                <div class="text-sm sm:text-base">🚚</div>
-                <div class="text-[9px] font-bold text-stone-800 mt-0.5">Safe Delivery</div>
-              </div>
-            </div>
-
           </div>
 
-          <!-- Right Column: Real Jar Visual -->
-          <div class="md:col-span-5 flex justify-center relative">
-            <div class="relative w-full max-w-[290px] text-center">
-              <div class="absolute -top-2 -right-2 bg-[#1B4332] text-amber-200 text-[10px] font-extrabold px-3 py-1 rounded-full shadow-md z-10">
-                Goodness in Every Drop ♥
-              </div>
-              <img 
-                src="assets/images/hero_jar.png" 
-                alt="BeesBee 2kg Honey Jar" 
-                class="w-full object-contain drop-shadow-xl"
-                onerror="this.src='assets/images/jar_2kg.png'"
-              />
-            </div>
+          <!-- Right Column: Clean Brand Emblem / Visual -->
+          <div class="w-40 sm:w-56 flex-shrink-0 flex items-center justify-center">
+            <img 
+              src="assets/images/logo_transparent.png" 
+              alt="BeesBee Pure Honey" 
+              class="max-h-28 sm:max-h-40 object-contain drop-shadow-sm"
+              onerror="this.src='assets/images/logo_clean.png'"
+            />
           </div>
 
         </div>
+
+        <!-- 4 Classical Trust Badges -->
+        <div class="grid grid-cols-4 gap-2 mt-5 pt-4 border-t border-[#EDE4D0]/80">
+          <div class="bg-white/85 rounded-xl p-2 text-center border border-stone-200/70 shadow-2xs">
+            <div class="text-sm sm:text-base">🍃</div>
+            <div class="text-[9px] sm:text-[10px] font-bold text-stone-800 mt-0.5">100% Natural</div>
+          </div>
+          <div class="bg-white/85 rounded-xl p-2 text-center border border-stone-200/70 shadow-2xs">
+            <div class="text-sm sm:text-base">🍯</div>
+            <div class="text-[9px] sm:text-[10px] font-bold text-stone-800 mt-0.5">No Added Sugar</div>
+          </div>
+          <div class="bg-white/85 rounded-xl p-2 text-center border border-stone-200/70 shadow-2xs">
+            <div class="text-sm sm:text-base">🛡️</div>
+            <div class="text-[9px] sm:text-[10px] font-bold text-stone-800 mt-0.5">Lab Tested</div>
+          </div>
+          <div class="bg-white/85 rounded-xl p-2 text-center border border-stone-200/70 shadow-2xs">
+            <div class="text-sm sm:text-base">🚚</div>
+            <div class="text-[9px] sm:text-[10px] font-bold text-stone-800 mt-0.5">Safe Delivery</div>
+          </div>
+        </div>
+
       </section>
 
       <!-- REAL SPECIAL HONEY DEAL BANNER -->
@@ -342,8 +337,91 @@
     </div>
 
     <!-- ---------------------------------------------------- -->
-    <!-- VIEW 2: ORDERS VIEW -->
+    <!-- VIEW: DEDICATED SHOP VIEW (Matching Image 2 Reference) -->
     <!-- ---------------------------------------------------- -->
+    <div id="view-shop" class="hidden py-4 sm:py-6">
+      
+      <!-- Top Shop Header Banner Matching Image 2 -->
+      <section class="rounded-3xl bg-gradient-to-r from-[#FFFDF8] via-[#FAF5EA] to-[#F5EEDF] border border-[#EDE4D3] p-5 sm:p-6 shadow-xs relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-bold font-serif-brand text-stone-900 leading-tight">
+              Shop <span class="text-[#D97706]">Honey</span>
+            </h1>
+            <p class="text-xs text-stone-600 mt-1 font-medium">Pure. Natural. Straight From Nature.</p>
+          </div>
+          <div class="relative flex items-center">
+            <img src="assets/images/honey_dipper_drip.png" alt="Honey Dipper" class="h-16 sm:h-20 object-contain drop-shadow-sm" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Search & Sort / Filter Bar -->
+      <div class="mt-4 flex items-center gap-2">
+        <div class="flex-1 relative flex items-center bg-white rounded-2xl border border-stone-200 shadow-xs px-3 py-2.5">
+          <svg class="w-4 h-4 text-stone-400 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input 
+            type="text" 
+            id="shop-search-input" 
+            oninput="handleShopSearch(this.value)"
+            placeholder="Search honey (e.g. 1kg, raw honey...)" 
+            class="w-full text-xs text-stone-800 placeholder-stone-400 bg-transparent outline-none"
+          />
+        </div>
+        <button 
+          type="button" 
+          onclick="toggleShopSort()" 
+          id="shop-sort-btn"
+          class="bg-white hover:bg-stone-50 border border-stone-200 text-stone-700 font-bold text-xs px-3 py-2.5 rounded-2xl shadow-xs flex items-center gap-1.5 whitespace-nowrap active:scale-95 transition-all">
+          <svg class="w-3.5 h-3.5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+          <span>Sort</span>
+        </button>
+        <button 
+          type="button" 
+          onclick="openCategoryFilterQuick()" 
+          class="bg-white hover:bg-stone-50 border border-stone-200 text-stone-700 font-bold text-xs px-3 py-2.5 rounded-2xl shadow-xs flex items-center gap-1.5 whitespace-nowrap active:scale-95 transition-all">
+          <svg class="w-3.5 h-3.5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+          <span>Filter</span>
+        </button>
+      </div>
+
+      <!-- Category Filter Pills Matching Image 2 -->
+      <div class="mt-3 flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+        <button onclick="setShopCategory('all', this)" class="shop-filter-pill active px-3.5 py-1.5 bg-[#1B4332] text-white font-bold rounded-full whitespace-nowrap shadow-xs transition-all">All Products</button>
+        <button onclick="setShopCategory('pure', this)" class="shop-filter-pill px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 font-bold rounded-full whitespace-nowrap hover:bg-stone-50 transition-all">Pure Honey</button>
+        <button onclick="setShopCategory('raw', this)" class="shop-filter-pill px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 font-bold rounded-full whitespace-nowrap hover:bg-stone-50 transition-all">Raw Honey</button>
+        <button onclick="setShopCategory('combo', this)" class="shop-filter-pill px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 font-bold rounded-full whitespace-nowrap hover:bg-stone-50 transition-all">Combo Packs</button>
+        <button onclick="setShopCategory('deals', this)" class="shop-filter-pill px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 font-bold rounded-full whitespace-nowrap hover:bg-stone-50 transition-all">Special Offers</button>
+      </div>
+
+      <!-- 2-Column Responsive Product Grid Matching Image 2 -->
+      <div id="shop-products-grid" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        <!-- Populated dynamically by renderShopCards() -->
+      </div>
+
+      <!-- Special Honey Deal Banner Matching Image 2 -->
+      <section class="mt-6 mb-8 rounded-3xl bg-gradient-to-r from-[#FFFDF5] via-[#FDF5E2] to-[#FCECC9] border border-amber-200 p-5 shadow-xs relative overflow-hidden">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <span class="text-[10px] font-extrabold uppercase bg-amber-800 text-white px-2 py-0.5 rounded tracking-wide">
+              SPECIAL HONEY DEAL
+            </span>
+            <h3 class="text-xl sm:text-2xl font-bold font-serif-brand text-stone-900 mt-2">
+              Buy 2kg Get <span class="text-[#D97706]">250g FREE!</span>
+            </h3>
+            <p class="text-xs text-stone-600 mt-1 font-medium">More Honey. More Happiness. • A Sweeter Tomorrow ♥</p>
+          </div>
+          <button 
+            type="button" 
+            onclick="claimSpecialDeal()" 
+            class="w-full sm:w-auto bg-[#1B4332] hover:bg-[#122E22] text-white font-bold text-xs py-3 px-6 rounded-2xl flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all whitespace-nowrap">
+            <span>Claim Offer</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </div>
+      </section>
+
+    </div>
     <div id="view-orders" class="hidden py-6">
       <div class="text-center mb-6">
         <h2 class="text-2xl font-bold font-heading text-stone-900">My Honey Orders</h2>
@@ -559,13 +637,13 @@
       <span class="text-[10px] font-bold">Home</span>
     </button>
 
-    <!-- 2. Orders -->
+    <!-- 2. Shop (Matching Image 2 Reference) -->
     <button 
-      id="tab-btn-orders" 
-      onclick="switchView('orders')" 
+      id="tab-btn-shop" 
+      onclick="switchView('shop')" 
       class="nav-tab flex flex-col items-center py-1 text-stone-500 focus:outline-none transition-colors">
-      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-      <span class="text-[10px] font-bold">Orders</span>
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+      <span class="text-[10px] font-bold">Shop</span>
     </button>
 
     <!-- 3. Offers -->
@@ -577,7 +655,16 @@
       <span class="text-[10px] font-bold">Offers</span>
     </button>
 
-    <!-- 4. Profile -->
+    <!-- 4. Orders -->
+    <button 
+      id="tab-btn-orders" 
+      onclick="switchView('orders')" 
+      class="nav-tab flex flex-col items-center py-1 text-stone-500 focus:outline-none transition-colors">
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      <span class="text-[10px] font-bold">Orders</span>
+    </button>
+
+    <!-- 5. Profile -->
     <button 
       id="tab-btn-profile" 
       onclick="switchView('profile')" 
@@ -922,57 +1009,250 @@
     </div>
   </div>
 
-  <!-- 8. MOBILE SIDEBAR DRAWER -->
-  <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 modal-backdrop flex">
-    <div class="bg-[#FAF7F2] w-72 h-full p-5 shadow-2xl flex flex-col justify-between">
-      <div>
-        <div class="flex justify-between items-center pb-4 border-b border-stone-200">
-          <img src="assets/images/logo_clean.png" alt="BeesBee" class="h-8 object-contain" />
-          <button onclick="closeSidebar()" class="text-stone-400 hover:text-stone-700 text-lg">✕</button>
+  <!-- 8. WISHLIST MODAL -->
+  <div id="wishlist-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl p-5 shadow-2xl border border-stone-200 max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center pb-2 border-b border-stone-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🤍</span>
+          <h3 class="font-bold text-base text-stone-900 font-heading">My Wishlist</h3>
+        </div>
+        <button onclick="closeWishlistModal()" class="text-stone-400 hover:text-stone-700 text-lg">✕</button>
+      </div>
+      <div class="py-3 space-y-3 flex-1 overflow-y-auto">
+        <!-- Wishlist Item 1 -->
+        <div class="flex items-center justify-between p-3 bg-stone-50 rounded-2xl border border-stone-200/70">
+          <div class="flex items-center gap-3">
+            <img src="assets/images/jar_1kg.png" alt="1kg Honey" class="w-12 h-12 object-contain" />
+            <div>
+              <div class="font-bold text-xs text-stone-900">BeesBee Pure Honey (1kg)</div>
+              <div class="text-[11px] text-amber-800 font-bold">₹649 <span class="text-[10px] text-stone-400 line-through">₹749</span></div>
+            </div>
+          </div>
+          <button onclick="handleAddToCart('1kg'); closeWishlistModal(); openCartDrawer();" class="bg-[#1B4332] text-white text-[10px] font-bold py-1.5 px-3 rounded-xl shadow-xs">
+            + Add to Cart
+          </button>
+        </div>
+        <!-- Wishlist Item 2 -->
+        <div class="flex items-center justify-between p-3 bg-stone-50 rounded-2xl border border-stone-200/70">
+          <div class="flex items-center gap-3">
+            <img src="assets/images/jar_2kg.png" alt="2kg Honey" class="w-12 h-12 object-contain" />
+            <div>
+              <div class="font-bold text-xs text-stone-900">BeesBee Pure Honey (2kg)</div>
+              <div class="text-[11px] text-amber-800 font-bold">₹1,199 <span class="text-[10px] text-emerald-700 font-bold">Free 250g Deal</span></div>
+            </div>
+          </div>
+          <button onclick="handleAddToCart('2kg'); closeWishlistModal(); openCartDrawer();" class="bg-[#1B4332] text-white text-[10px] font-bold py-1.5 px-3 rounded-xl shadow-xs">
+            + Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. ADDRESSES MODAL -->
+  <div id="addresses-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl p-5 shadow-2xl border border-stone-200 max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center pb-2 border-b border-stone-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📍</span>
+          <h3 class="font-bold text-base text-stone-900 font-heading">My Delivery Addresses</h3>
+        </div>
+        <button onclick="closeAddressesModal()" class="text-stone-400 hover:text-stone-700 text-lg">✕</button>
+      </div>
+      <div class="py-3 flex-1 overflow-y-auto space-y-3">
+        <div class="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-2xl">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold uppercase bg-emerald-800 text-white px-2 py-0.5 rounded">Default Address</span>
+            <button onclick="openProfileView(); closeAddressesModal();" class="text-xs font-bold text-amber-800 hover:underline">Edit</button>
+          </div>
+          <div class="font-bold text-xs text-stone-900 mt-2" id="saved-address-name-display">Tausif Shaikh</div>
+          <div class="text-[11px] text-stone-600 mt-0.5" id="saved-address-details-display">Address not set yet. Save details in your profile.</div>
+        </div>
+        <button onclick="closeAddressesModal(); switchView('profile');" class="w-full py-2.5 bg-[#1B4332] text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2">
+          <span>Manage in Profile</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. REWARDS MODAL -->
+  <div id="rewards-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl p-5 shadow-2xl border border-stone-200 max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center pb-2 border-b border-stone-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">👑</span>
+          <h3 class="font-bold text-base text-stone-900 font-heading">BeesBee Rewards</h3>
+        </div>
+        <button onclick="closeRewardsModal()" class="text-stone-400 hover:text-stone-700 text-lg">✕</button>
+      </div>
+      <div class="py-4 text-center">
+        <div class="w-16 h-16 bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 font-black text-2xl rounded-full flex items-center justify-center mx-auto shadow-md">
+          100
+        </div>
+        <h4 class="font-bold text-sm text-stone-900 mt-2">Available Honey Points</h4>
+        <p class="text-xs text-stone-500 mt-1">Welcome bonus credited to your account!</p>
+
+        <div class="mt-4 p-3 bg-amber-50 rounded-2xl border border-amber-200 text-left text-xs text-amber-900 space-y-1.5">
+          <div class="font-bold">✨ How to use your rewards:</div>
+          <div>• Earn 50 points with every 1kg or 2kg jar ordered</div>
+          <div>• Redeem 200 points for a FREE 250g honey jar on WhatsApp</div>
+          <div>• Instant ₹100 discount coupon code: <span class="font-mono font-bold bg-white px-1.5 py-0.5 rounded border border-amber-300 text-amber-950">WELCOME100</span></div>
         </div>
 
+        <button onclick="closeRewardsModal(); switchView('shop');" class="mt-5 w-full bg-[#1B4332] text-white font-bold text-xs py-3 rounded-xl">
+          Shop & Earn More Points
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. RECREATED MOBILE SIDEBAR DRAWER (Matching Image 1 Reference) -->
+  <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 modal-backdrop flex">
+    <div class="bg-[#FAF7F2] w-80 max-w-[85vw] h-full shadow-2xl flex flex-col justify-between overflow-y-auto">
+      
+      <div class="p-5 pb-3">
+        <!-- Top Close Button -->
+        <div class="flex justify-end">
+          <button onclick="closeSidebar()" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500 hover:text-stone-800 transition-colors">
+            ✕
+          </button>
+        </div>
+
+        <!-- Centered BeesBee Logo -->
+        <div class="flex flex-col items-center -mt-2">
+          <img src="assets/images/logo_clean.png" alt="BeesBee" class="h-12 object-contain" onerror="this.src='assets/images/logo.png'" />
+        </div>
+
+        <!-- User Profile Header Card Matching Image 1 -->
+        <div class="mt-4 p-3.5 bg-white rounded-2xl border border-stone-200/80 shadow-2xs relative overflow-hidden flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-full bg-emerald-100/80 text-[#1B4332] flex items-center justify-center font-bold text-lg border border-emerald-200 shrink-0">
+              <svg class="w-6 h-6 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            </div>
+            <div>
+              <div class="text-[11px] text-stone-500 font-medium leading-none">Assalamu Alaikum,</div>
+              <div id="sidebar-user-name" class="font-extrabold text-sm text-stone-900 mt-0.5">Tausif Shaikh</div>
+              <div class="text-[10px] text-stone-500 mt-0.5 font-medium leading-tight">Good choices lead to a healthier tomorrow 🌿</div>
+            </div>
+          </div>
+          <div class="shrink-0 -mr-2">
+            <img src="assets/images/honey_dipper_drip.png" alt="Honey" class="w-12 h-12 object-contain opacity-90" />
+          </div>
+        </div>
+
+        <!-- Classical Navigation Menu Items Matching Image 1 -->
         <nav class="mt-4 space-y-1 text-xs font-bold text-stone-800">
-          <button onclick="closeSidebar(); switchView('home');" class="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60 text-left">
-            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <!-- Home -->
+          <button onclick="closeSidebar(); switchView('home');" id="sidebar-btn-home" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-emerald-50 text-[#1B4332] text-left transition-colors">
+            <svg class="w-4 h-4 text-[#1B4332]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
             <span>Home</span>
           </button>
-          
-          <button onclick="closeSidebar(); scrollToProducts();" class="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60 text-left">
-            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-            <span>Shop Bottle Sizes</span>
-          </button>
-          
-          <button onclick="closeSidebar(); switchView('offers');" class="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60 text-left">
-            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-            <span>Special Offers & Combos</span>
-          </button>
-          
-          <button onclick="closeSidebar(); switchView('orders');" class="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60 text-left">
-            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-            <span>Track My Orders</span>
-          </button>
-          
-          <button onclick="closeSidebar(); openCartDrawer();" class="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60 text-left">
-            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-            <span>My Honey Basket</span>
+
+          <!-- Shop -->
+          <button onclick="closeSidebar(); switchView('shop');" id="sidebar-btn-shop" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+            <svg class="w-4 h-4 text-[#D97706]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            <span>Shop</span>
           </button>
 
-          <button onclick="closeSidebar(); openOurStoryModal();" class="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-100/60 text-left">
-            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <span>Our Purity Story</span>
+          <!-- Offers -->
+          <button onclick="closeSidebar(); switchView('offers');" id="sidebar-btn-offers" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+            <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+            <span>Offers</span>
           </button>
 
-          <!-- PWA Install Button in Sidebar -->
-          <button onclick="closeSidebar(); triggerPWAInstall();" class="w-full mt-2 bg-amber-100 text-amber-900 border border-amber-300 font-extrabold flex items-center gap-3 p-2.5 rounded-xl text-left">
-            <svg class="w-4 h-4 text-amber-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          <!-- My Cart with Badge -->
+          <button onclick="closeSidebar(); openCartDrawer();" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+              <span>My Cart</span>
+            </div>
+            <span id="sidebar-cart-count" class="bg-[#D97706] text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+          </button>
+
+          <!-- My Orders -->
+          <button onclick="closeSidebar(); switchView('orders');" id="sidebar-btn-orders" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+            <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            <span>My Orders</span>
+          </button>
+
+          <!-- My Wishlist -->
+          <button onclick="closeSidebar(); openWishlistModal();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+            <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            <span>My Wishlist</span>
+          </button>
+
+          <!-- My Addresses -->
+          <button onclick="closeSidebar(); openAddressesModal();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+            <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span>My Addresses</span>
+          </button>
+
+          <!-- BeesBee Rewards -->
+          <button onclick="closeSidebar(); openRewardsModal();" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>BeesBee Rewards</span>
+            </div>
+            <span class="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-extrabold px-2 py-0.5 rounded-full">100 Points</span>
+          </button>
+
+          <div class="pt-2 border-t border-stone-200 my-1"></div>
+
+          <!-- Help & Support -->
+          <a href="https://wa.me/919876543210?text=Hi%20BeesBee!%20I%20need%20help%20with%20pure%20honey%20orders." target="_blank" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+            <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            <span>Help & Support</span>
+          </a>
+
+          <!-- About BeesBee -->
+          <button onclick="closeSidebar(); openOurStoryModal();" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+            <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>About BeesBee</span>
+          </button>
+
+          <!-- Settings -->
+          <button onclick="closeSidebar(); switchView('profile');" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+            <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span>Settings</span>
+          </button>
+
+          <!-- Install App Button in Sidebar -->
+          <button onclick="closeSidebar(); triggerPWAInstall();" class="w-full mt-2 bg-amber-50 text-amber-900 border border-amber-200 font-extrabold flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left">
+            <svg class="w-4 h-4 text-amber-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             <span>📲 Install BeesBee App</span>
           </button>
         </nav>
+
+        <!-- Spread the Goodness Referral Card Matching Image 1 -->
+        <div onclick="shareReferral()" class="mt-4 p-3 bg-emerald-50/90 rounded-2xl border border-emerald-200/80 cursor-pointer flex items-center justify-between gap-2 shadow-2xs hover:bg-emerald-100/70 transition-colors">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-sm font-bold shrink-0">
+              🌿
+            </div>
+            <div>
+              <div class="font-extrabold text-xs text-stone-900 leading-tight">Spread the Goodness</div>
+              <div class="text-[10px] text-stone-600 font-medium">Refer friends & family and earn rewards!</div>
+            </div>
+          </div>
+          <svg class="w-4 h-4 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </div>
+
       </div>
 
-      <div class="pt-4 border-t border-stone-200 text-center text-[10px] text-stone-500">
-        BeesBee — Pure Honey. Straight From Nature.
+      <!-- Bottom Section Matching Image 1: Log Out & Script Tagline -->
+      <div class="p-5 pt-3 border-t border-stone-200 bg-white/60 flex items-center justify-between">
+        <button onclick="handleLogout()" class="text-rose-600 font-bold text-xs flex items-center gap-2 hover:text-rose-700 transition-colors">
+          <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          <span>Log Out</span>
+        </button>
+
+        <div class="text-right">
+          <img src="assets/images/sidebar_flourish.png" alt="Pure Natural Trusted" class="h-8 object-contain" />
+        </div>
       </div>
+
     </div>
   </div>
 

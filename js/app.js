@@ -13,11 +13,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initApp() {
   renderProductCards();
+  renderShopCards();
   renderSpecialOffersSection();
   renderVideoSection();
   setupEventListeners();
   updateCartBadge();
   setupProfileData();
+  initHistoryHandling();
+}
+
+/**
+ * Native PWA History API Back-Button Handling
+ */
+let historyInitialized = false;
+
+function initHistoryHandling() {
+  if (historyInitialized) return;
+  historyInitialized = true;
+
+  try {
+    history.replaceState({ view: 'home' }, '');
+  } catch (e) {}
+
+  window.addEventListener('popstate', (event) => {
+    // 1. If any drawer or modal is open, close it!
+    const closedOverlay = closeAnyActiveOverlay();
+    if (closedOverlay) {
+      return; // Handled back button by closing overlay
+    }
+
+    // 2. If no modal is open, switch view back smoothly
+    if (event.state && event.state.view) {
+      switchView(event.state.view, false);
+    } else {
+      switchView('home', false);
+    }
+  });
+}
+
+function pushHistoryState(stateObj) {
+  try {
+    history.pushState(stateObj, '');
+  } catch (e) {}
+}
+
+function closeAnyActiveOverlay() {
+  const overlayIds = [
+    'wishlist-modal',
+    'addresses-modal',
+    'rewards-modal',
+    'checkout-modal',
+    'product-detail-modal',
+    'video-modal',
+    'story-modal',
+    'search-modal',
+    'notifications-modal',
+    'cart-drawer',
+    'mobile-sidebar'
+  ];
+
+  for (const id of overlayIds) {
+    const el = document.getElementById(id);
+    if (el && !el.classList.contains('hidden')) {
+      el.classList.add('hidden');
+      document.body.style.overflow = '';
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -88,12 +151,16 @@ function triggerPWAInstall() {
 }
 
 /**
- * Switch Bottom Navigation Views: Home, Orders, Offers, Profile
+ * Switch Bottom Navigation Views: Home, Shop, Orders, Offers, Profile
  */
-function switchView(viewName) {
+function switchView(viewName, pushHistory = true) {
   currentActiveView = viewName;
 
-  const views = ['home', 'orders', 'offers', 'profile'];
+  if (pushHistory) {
+    pushHistoryState({ view: viewName });
+  }
+
+  const views = ['home', 'shop', 'orders', 'offers', 'profile'];
   views.forEach(v => {
     const el = document.getElementById(`view-${v}`);
     if (el) {
@@ -118,11 +185,25 @@ function switchView(viewName) {
         if (svg) svg.classList.remove("text-[#D97706]", "stroke-[#D97706]");
       }
     }
+
+    // Sidebar active item styling
+    const sideBtn = document.getElementById(`sidebar-btn-${v}`);
+    if (sideBtn) {
+      if (v === viewName) {
+        sideBtn.classList.add("bg-emerald-50", "text-[#1B4332]");
+        sideBtn.classList.remove("text-stone-800");
+      } else {
+        sideBtn.classList.remove("bg-emerald-50", "text-[#1B4332]");
+        sideBtn.classList.add("text-stone-800");
+      }
+    }
   });
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  if (viewName === 'orders') {
+  if (viewName === 'shop') {
+    renderShopCards();
+  } else if (viewName === 'orders') {
     renderOrdersListView();
   }
 }
@@ -254,6 +335,179 @@ function renderProductCards(filterSize = null) {
 }
 
 /**
+ * Dedicated Shop Page Functions (Matching Image 2 Reference)
+ */
+let currentShopCategory = 'all';
+let currentShopSearchQuery = '';
+let currentShopSortAsc = true;
+
+function renderShopCards() {
+  const grid = document.getElementById("shop-products-grid");
+  if (!grid) return;
+
+  const product = window.BEESBEE_PRODUCTS[0];
+  let sizes = [...product.sizes];
+
+  // Category filter
+  if (currentShopCategory === 'pure') {
+    // All pure honey jars
+  } else if (currentShopCategory === 'raw') {
+    // All raw honey jars
+  } else if (currentShopCategory === 'combo' || currentShopCategory === 'deals') {
+    sizes = sizes.filter(s => s.size === '2kg' || s.size === '1kg');
+  }
+
+  // Search filter
+  if (currentShopSearchQuery) {
+    const q = currentShopSearchQuery.toLowerCase().trim();
+    sizes = sizes.filter(s => 
+      s.size.toLowerCase().includes(q) || 
+      s.tagline.toLowerCase().includes(q) || 
+      "pure natural honey".includes(q)
+    );
+  }
+
+  // Sort
+  if (!currentShopSortAsc) {
+    sizes.sort((a, b) => b.price - a.price);
+  } else {
+    sizes.sort((a, b) => a.price - b.price);
+  }
+
+  if (sizes.length === 0) {
+    grid.innerHTML = `
+      <div class="col-span-full py-10 text-center text-stone-400 text-xs">
+        No honey jars found matching your search.
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = sizes.map(item => `
+    <div class="bg-white rounded-2xl p-3 sm:p-4 border border-stone-200/90 shadow-2xs flex flex-col justify-between hover:border-amber-400 transition-all duration-300 group">
+      <div>
+        <!-- Badges Bar -->
+        <div class="flex items-center justify-between">
+          <span class="bg-amber-100 text-amber-900 text-[11px] font-extrabold px-2.5 py-0.5 rounded-md">
+            ${item.size}
+          </span>
+          ${item.size === '2kg' ? `
+            <span class="bg-[#1B4332] text-amber-200 text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-md">
+              BEST VALUE
+            </span>
+          ` : ''}
+        </div>
+
+        <!-- Jar Image -->
+        <div class="flex items-center justify-center py-2 cursor-pointer" onclick="openProductDetailModal('${item.size}')">
+          <img 
+            src="${item.image}" 
+            alt="BeesBee Pure Honey ${item.size}" 
+            class="h-28 sm:h-36 object-contain group-hover:scale-105 transition-transform duration-300"
+            onerror="this.src='assets/images/jar_${item.size}.png'"
+          />
+        </div>
+
+        <!-- Details -->
+        <h4 class="font-bold text-xs sm:text-sm text-stone-900 leading-tight">BeesBee Pure Honey</h4>
+        <p class="text-[11px] text-stone-500 font-medium mt-0.5 line-clamp-1">${item.tagline}.</p>
+
+        <!-- Feature Checkmarks Matching Image 2 -->
+        <div class="space-y-0.5 mt-2.5 text-[10px] text-stone-600 font-medium">
+          <div class="flex items-center gap-1.5">
+            <span class="text-emerald-700">🍃</span>
+            <span>100% Natural</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-amber-700">⚗️</span>
+            <span>No Added Sugar</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-stone-700">🛡️</span>
+            <span>Lab Tested</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price & Real Interactive Dual Buttons Matching Image 2 -->
+      <div class="mt-3 pt-2.5 border-t border-stone-100">
+        <div class="text-base sm:text-lg font-black text-stone-900 mb-2">
+          ₹${item.price}
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <button 
+            type="button" 
+            onclick="handleAddToCart('${item.size}')"
+            class="w-full bg-white hover:bg-stone-50 border border-stone-300 text-stone-800 font-bold text-[11px] py-2 px-2.5 rounded-xl flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 transition-all">
+            <svg class="w-3.5 h-3.5 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            <span>Add to Cart</span>
+          </button>
+
+          <button 
+            type="button" 
+            onclick="openDirectOrderModal('${item.size}')"
+            class="w-full bg-[#D97706] hover:bg-[#B45309] text-white font-bold text-[11px] py-2 px-2.5 rounded-xl flex items-center justify-center gap-1 shadow-xs active:scale-95 transition-all">
+            <span>Order Now</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function handleShopSearch(val) {
+  currentShopSearchQuery = val;
+  renderShopCards();
+}
+
+function setShopCategory(cat, btnEl) {
+  currentShopCategory = cat;
+  const pills = document.querySelectorAll(".shop-filter-pill");
+  pills.forEach(p => {
+    p.classList.remove("bg-[#1B4332]", "text-white", "active");
+    p.classList.add("bg-white", "text-stone-700", "border", "border-stone-200");
+  });
+
+  if (btnEl) {
+    btnEl.classList.remove("bg-white", "text-stone-700", "border-stone-200");
+    btnEl.classList.add("bg-[#1B4332]", "text-white", "active");
+  }
+
+  renderShopCards();
+}
+
+function toggleShopSort() {
+  currentShopSortAsc = !currentShopSortAsc;
+  const btn = document.getElementById("shop-sort-btn");
+  if (btn) {
+    btn.querySelector("span").textContent = currentShopSortAsc ? "Sort ↑" : "Sort ↓";
+  }
+  renderShopCards();
+  showToast(currentShopSortAsc ? "Sorted by Price: Low to High" : "Sorted by Price: High to Low", "info");
+}
+
+function openCategoryFilterQuick() {
+  const current = currentShopCategory;
+  const next = current === 'all' ? 'combo' : 'all';
+  const pills = document.querySelectorAll(".shop-filter-pill");
+  pills.forEach(p => {
+    if (next === 'combo' && p.textContent.includes('Combo')) {
+      setShopCategory('combo', p);
+    } else if (next === 'all' && p.textContent.includes('All')) {
+      setShopCategory('all', p);
+    }
+  });
+}
+
+function claimSpecialDeal() {
+  handleAddToCart('2kg');
+  openCartDrawer();
+  showToast("Special Deal Applied! Buy 2kg and get 250g FREE 🎁", "success");
+}
+
+/**
  * Render Special Offer Banner on Home View
  */
 function renderSpecialOffersSection() {
@@ -378,6 +632,11 @@ function updateCartBadge() {
       badge.classList.add("hidden");
     }
   });
+
+  const sidebarCount = document.getElementById("sidebar-cart-count");
+  if (sidebarCount) {
+    sidebarCount.textContent = summary.totalCount;
+  }
 }
 
 /**
@@ -411,6 +670,7 @@ function openProductDetailModal(initialSize = "500g") {
 
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
+  pushHistoryState({ modal: 'product-detail-modal' });
 }
 
 function selectModalSize(size) {
@@ -466,6 +726,7 @@ function openVideoPlayerModal() {
 
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
+  pushHistoryState({ modal: 'video-modal' });
 }
 
 function closeVideoPlayerModal() {
@@ -487,6 +748,7 @@ function openOurStoryModal() {
   if (modal) {
     modal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
+    pushHistoryState({ modal: 'story-modal' });
   }
 }
 
@@ -508,6 +770,7 @@ function openCartDrawer() {
   renderCartDrawerContents();
   drawer.classList.remove("hidden");
   document.body.style.overflow = "hidden";
+  pushHistoryState({ modal: 'cart-drawer' });
 }
 
 function closeCartDrawer() {
@@ -696,6 +959,7 @@ function openCheckoutModalUI() {
 
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
+  pushHistoryState({ modal: 'checkout-modal' });
 }
 
 function closeCheckoutModal() {
@@ -1007,6 +1271,7 @@ function openSidebar() {
   const sidebar = document.getElementById("mobile-sidebar");
   if (sidebar) sidebar.classList.remove("hidden");
   document.body.style.overflow = "hidden";
+  pushHistoryState({ modal: 'mobile-sidebar' });
 }
 
 function closeSidebar() {
@@ -1022,6 +1287,8 @@ function openSearchModal() {
   const modal = document.getElementById("search-modal");
   if (modal) {
     modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    pushHistoryState({ modal: 'search-modal' });
     const input = document.getElementById("search-input");
     if (input) setTimeout(() => input.focus(), 100);
   }
@@ -1030,6 +1297,7 @@ function openSearchModal() {
 function closeSearchModal() {
   const modal = document.getElementById("search-modal");
   if (modal) modal.classList.add("hidden");
+  document.body.style.overflow = "";
 }
 
 function handleSearchInput(event) {
@@ -1048,8 +1316,8 @@ function handleSearchInput(event) {
 
   const product = window.BEESBEE_PRODUCTS[0];
   const matched = product.sizes.filter(s => 
-    s.size.toLowerCase().includes(query) ||
-    s.tagline.toLowerCase().includes(query) ||
+    s.size.toLowerCase().includes(query) || 
+    s.tagline.toLowerCase().includes(query) || 
     "natural honey raw".includes(query)
   );
 
@@ -1102,12 +1370,102 @@ function openNotificationsModal() {
 
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
+  pushHistoryState({ modal: 'notifications-modal' });
 }
 
 function closeNotificationsModal() {
   const modal = document.getElementById("notifications-modal");
   if (modal) modal.classList.add("hidden");
   document.body.style.overflow = "";
+}
+
+/**
+ * Wishlist Modal
+ */
+function openWishlistModal() {
+  const modal = document.getElementById("wishlist-modal");
+  if (modal) {
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    pushHistoryState({ modal: 'wishlist-modal' });
+  }
+}
+
+function closeWishlistModal() {
+  const modal = document.getElementById("wishlist-modal");
+  if (modal) modal.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+/**
+ * Addresses Modal
+ */
+function openAddressesModal() {
+  const modal = document.getElementById("addresses-modal");
+  if (modal) {
+    const profile = window.checkoutManager.getSavedProfile();
+    const nameEl = document.getElementById("saved-address-name-display");
+    const addrEl = document.getElementById("saved-address-details-display");
+    if (profile && profile.name) {
+      if (nameEl) nameEl.textContent = profile.name;
+      if (addrEl && profile.houseNo) addrEl.textContent = `${profile.houseNo}, ${profile.area || ''}`;
+    }
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    pushHistoryState({ modal: 'addresses-modal' });
+  }
+}
+
+function closeAddressesModal() {
+  const modal = document.getElementById("addresses-modal");
+  if (modal) modal.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+/**
+ * Rewards Modal
+ */
+function openRewardsModal() {
+  const modal = document.getElementById("rewards-modal");
+  if (modal) {
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    pushHistoryState({ modal: 'rewards-modal' });
+  }
+}
+
+function closeRewardsModal() {
+  const modal = document.getElementById("rewards-modal");
+  if (modal) modal.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+/**
+ * Referral Sharing Handler
+ */
+function shareReferral() {
+  const text = "Discover 100% Pure Raw Honey straight from untouched forest hives at BeesBee! Order on WhatsApp: " + window.location.href;
+  if (navigator.share) {
+    navigator.share({
+      title: "BeesBee — Pure Honey",
+      text: text,
+      url: window.location.href
+    }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast("Referral link copied! Share with friends & family 🌿", "success");
+    }).catch(() => {
+      showToast("Share BeesBee with code WELCOME100 for ₹100 OFF!", "info");
+    });
+  }
+}
+
+/**
+ * Logout Handler
+ */
+function handleLogout() {
+  closeSidebar();
+  showToast("Guest session active. Ready to order pure honey! 🍯", "info");
 }
 
 /**
