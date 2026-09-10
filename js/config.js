@@ -73,22 +73,7 @@ const CONFIG = {
     }
   ],
 
-  announcements: [
-    {
-      id: "ann-fresh-batch",
-      title: "🍯 Fresh Monsoon Harvest Now Available!",
-      message: "Our newest forest honey harvest is bottled and ready. Rich in natural pollens and antioxidants.",
-      date: "Active Now",
-      isNew: true
-    },
-    {
-      id: "ann-free-shipping",
-      title: "🚚 Free Nationwide Delivery On All Orders",
-      message: "Enjoy free priority safe-glass packing and doorstep delivery across all states.",
-      date: "Ongoing",
-      isNew: false
-    }
-  ]
+  announcements: []
 };
 
 // Expose on window

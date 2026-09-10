@@ -197,3 +197,25 @@ h1, h2, h3, .font-heading {
   stroke: #e11d48;
   color: #e11d48;
 }
+
+/* Shop Category Filter Pills - High Contrast Guarantee */
+.shop-filter-pill {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+.shop-filter-pill.active {
+  background-color: #1B4332 !important;
+  color: #ffffff !important;
+  border-color: #1B4332 !important;
+  box-shadow: 0 2px 8px -1px rgba(27, 67, 50, 0.35) !important;
+}
+.shop-filter-pill:not(.active) {
+  background-color: #ffffff !important;
+  color: #292524 !important;
+  border-color: #e7e5e4 !important;
+}
+.shop-filter-pill:not(.active):hover {
+  background-color: #fafaf9 !important;
+  color: #1c1917 !important;
+}
+

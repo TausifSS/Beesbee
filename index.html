@@ -55,7 +55,7 @@
   </script>
 
   <!-- Custom Styles -->
-  <link rel="stylesheet" href="css/style.css?v=3.0">
+  <link rel="stylesheet" href="css/style.css?v=4.0">
   <link rel="icon" type="image/png" href="assets/images/logo.png">
 </head>
 <body class="bg-[#FAF7F2] text-[#2B1810] antialiased selection:bg-amber-200 selection:text-amber-900 safe-bottom-padding">
@@ -125,7 +125,6 @@
           class="p-2 rounded-xl text-stone-700 hover:bg-stone-100 transition-colors relative"
           aria-label="Notifications">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500 ring-2 ring-white"></span>
         </button>
 
         <button 
@@ -330,7 +329,7 @@
             <p class="text-xs text-stone-600 mt-1 font-medium">Pure. Natural. Straight From Nature.</p>
           </div>
           <div class="relative flex items-center">
-            <img src="assets/images/honey_dipper_drip.png" alt="Honey Dipper" class="h-16 sm:h-20 object-contain drop-shadow-sm" />
+            <img src="assets/images/logo_clean.png" alt="BeesBee Pure Honey" class="h-12 sm:h-14 object-contain drop-shadow-xs" onerror="this.src='assets/images/logo.png'" />
           </div>
         </div>
       </section>
@@ -654,26 +653,7 @@
 
   </nav>
 
-  <!-- ======================================================== -->
-  <!-- PWA INSTALL BANNER FOR 1ST-TIME VISITORS -->
-  <!-- ======================================================== -->
-  <div id="pwa-install-banner" class="hidden fixed bottom-16 sm:bottom-6 left-4 right-4 max-w-md mx-auto z-50 bg-[#1B4332] text-white p-4 rounded-2xl shadow-2xl border border-emerald-700 flex items-center justify-between gap-3">
-    <div class="flex items-center gap-3">
-      <img src="assets/images/logo.png" alt="BeesBee App" class="w-10 h-10 object-contain bg-white rounded-xl p-1" />
-      <div>
-        <h4 class="font-bold text-xs text-amber-200">Install BeesBee App</h4>
-        <p class="text-[10px] text-emerald-100">1-Tap WhatsApp ordering & fast tracking</p>
-      </div>
-    </div>
-    <div class="flex items-center gap-2">
-      <button onclick="triggerPWAInstall()" class="bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs py-1.5 px-3 rounded-lg shadow-sm">
-        Install
-      </button>
-      <button onclick="hidePWAInstallBanner(true)" class="text-stone-300 hover:text-white p-1 text-sm">
-        ✕
-      </button>
-    </div>
-  </div>
+
 
   <!-- ======================================================== -->
   <!-- MODALS & DRAWERS -->
@@ -792,25 +772,47 @@
           <input type="tel" id="checkout-phone" placeholder="e.g. 9561762651 (10 digits)" class="w-full text-xs p-2.5 rounded-xl border border-stone-300 focus:border-amber-500 outline-none" />
         </div>
 
-        <!-- MANDATORY GPS BUTTON -->
-        <div class="p-3 bg-amber-50/80 rounded-2xl border border-amber-200/80">
+        <!-- SAVED DELIVERY LOCATION CARD (For Returning Customers) -->
+        <div id="saved-location-container" class="hidden p-3 bg-emerald-50/80 rounded-2xl border border-emerald-200/80">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-start gap-2 min-w-0">
+              <span class="text-base text-emerald-700 mt-0.5 shrink-0">📍</span>
+              <div class="min-w-0">
+                <div class="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
+                  <span>Delivery Location Saved</span>
+                  <span class="text-[9px] bg-emerald-200 text-emerald-900 font-extrabold px-1.5 py-0.2 rounded-full">✓ Verified</span>
+                </div>
+                <div id="saved-location-text" class="text-[11px] text-emerald-800 line-clamp-1 mt-0.5">Your doorstep pin is already confirmed.</div>
+              </div>
+            </div>
+            <button 
+              type="button" 
+              onclick="toggleChangeLocationPin()"
+              class="shrink-0 text-[11px] font-bold text-[#D97706] hover:text-[#B45309] bg-white border border-amber-200 px-2.5 py-1.5 rounded-xl shadow-2xs transition-all active:scale-95">
+              Change Pin
+            </button>
+          </div>
+        </div>
+
+        <!-- DELIVERY LOCATION PIN (For First-time Users or When Changing Pin) -->
+        <div id="new-location-container" class="p-3 bg-amber-50/80 rounded-2xl border border-amber-200/80">
           <div class="flex items-center justify-between mb-1.5">
             <span class="text-xs font-bold text-[#92400E] flex items-center gap-1">
-              <span>📍</span> Mandatory Delivery GPS Location
+              <span>📍</span> Delivery Location Pin
             </span>
-            <span class="text-[10px] font-extrabold bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Required</span>
+            <span class="text-[10px] font-bold bg-amber-200/70 text-amber-900 px-2 py-0.5 rounded-full">Doorstep Delivery</span>
           </div>
           <p class="text-[11px] text-stone-600 mb-2">
-            Tap below to capture your exact location pin. We embed a Google Maps link in WhatsApp so your delivery rider never gets lost.
+            Pin your doorstep on Google Maps so our delivery partner can bring your fresh honey directly to you.
           </p>
 
           <button 
             type="button" 
             id="gps-action-btn"
             onclick="handleCaptureGPS()"
-            class="w-full bg-[#D97706] hover:bg-[#B45309] text-white font-bold text-xs py-2.5 px-4 rounded-xl shadow-xs flex items-center justify-center gap-2 transition-all">
+            class="w-full bg-[#1B4332] hover:bg-[#122E22] text-white font-bold text-xs py-2.5 px-4 rounded-xl shadow-xs flex items-center justify-center gap-2 transition-all active:scale-98">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            <span>Get Current Location (GPS)</span>
+            <span id="gps-btn-text">Pin Delivery Location</span>
           </button>
 
           <div id="gps-status-indicator" class="hidden mt-2"></div>
@@ -1182,7 +1184,7 @@
           </button>
 
           <!-- Install App Button in Sidebar -->
-          <button onclick="closeSidebar(); openPWAInstallModal();" class="w-full mt-2 bg-amber-50 text-amber-900 border border-amber-200 font-extrabold flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left hover:bg-amber-100 transition-colors">
+          <button onclick="closeSidebar(); triggerPWAInstall();" class="w-full mt-2 bg-amber-50 text-amber-900 border border-amber-200 font-extrabold flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left hover:bg-amber-100 transition-colors">
             <svg class="w-4 h-4 text-amber-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             <span>📲 Install BeesBee App</span>
           </button>
@@ -1216,11 +1218,11 @@
   </div>
 
   <!-- Scripts with Cache-Busting -->
-  <script src="js/config.js?v=3.0"></script>
-  <script src="js/products.js?v=3.0"></script>
-  <script src="js/cart.js?v=3.0"></script>
-  <script src="js/checkout.js?v=3.0"></script>
-  <script src="js/orders.js?v=3.0"></script>
-  <script src="js/app.js?v=3.0"></script>
+  <script src="js/config.js?v=4.0"></script>
+  <script src="js/products.js?v=4.0"></script>
+  <script src="js/cart.js?v=4.0"></script>
+  <script src="js/checkout.js?v=4.0"></script>
+  <script src="js/orders.js?v=4.0"></script>
+  <script src="js/app.js?v=4.0"></script>
 </body>
 </html>

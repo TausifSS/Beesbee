@@ -1,4 +1,4 @@
-const CACHE_NAME = 'beesbee-v3';
+const CACHE_NAME = 'beesbee-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

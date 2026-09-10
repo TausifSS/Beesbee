@@ -94,7 +94,7 @@ function closeAnyActiveOverlay() {
  */
 function initPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=3.0')
+    navigator.serviceWorker.register('./sw.js?v=4.0')
       .then((reg) => {
         console.log('BeesBee Service Worker registered with scope:', reg.scope);
         // Force check for updates to guarantee mobile Chrome gets latest code
@@ -107,56 +107,30 @@ function initPWA() {
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPWAInstallPrompt = e;
-
-    // Check if user has already dismissed prompt in localStorage
-    const hasDismissed = localStorage.getItem('beesbee_pwa_dismissed');
-    if (!hasDismissed) {
-      setTimeout(() => {
-        showPWAInstallBanner();
-      }, 2500);
-    }
   });
 
   window.addEventListener('appinstalled', () => {
     console.log('BeesBee App installed successfully!');
-    hidePWAInstallBanner();
     showToast("BeesBee App installed! 🍯", "success");
     deferredPWAInstallPrompt = null;
   });
 }
 
-function showPWAInstallBanner() {
-  const banner = document.getElementById("pwa-install-banner");
-  if (banner) {
-    banner.classList.remove("translate-y-full", "hidden");
-  }
-}
-
-function hidePWAInstallBanner(permanently = false) {
-  const banner = document.getElementById("pwa-install-banner");
-  if (banner) {
-    banner.classList.add("translate-y-full");
-    setTimeout(() => banner.classList.add("hidden"), 350);
-  }
-  if (permanently) {
-    localStorage.setItem('beesbee_pwa_dismissed', 'true');
-  }
-}
+function showPWAInstallBanner() {}
+function hidePWAInstallBanner() {}
 
 function triggerPWAInstall() {
   if (deferredPWAInstallPrompt) {
     deferredPWAInstallPrompt.prompt();
     deferredPWAInstallPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted PWA install');
-      } else {
-        console.log('User dismissed PWA install');
+      if (choiceResult && choiceResult.outcome === 'accepted') {
+        showToast("Installing BeesBee App! 🍯", "success");
       }
       deferredPWAInstallPrompt = null;
-      hidePWAInstallBanner();
     });
   } else {
-    showToast("To install, tap Share and select 'Add to Home Screen' in your browser", "info");
+    // If native prompt is not available, open instructional modal
+    openPWAInstallModal();
   }
 }
 
@@ -369,11 +343,13 @@ function renderShopCards() {
 
   // Category filter
   if (currentShopCategory === 'pure') {
-    // All pure honey jars
+    sizes = sizes.filter(s => s.size === '250g' || s.size === '500g');
   } else if (currentShopCategory === 'raw') {
-    // All raw honey jars
-  } else if (currentShopCategory === 'combo' || currentShopCategory === 'deals') {
+    sizes = sizes.filter(s => s.size === '1kg' || s.size === '2kg');
+  } else if (currentShopCategory === 'combo') {
     sizes = sizes.filter(s => s.size === '2kg' || s.size === '1kg');
+  } else if (currentShopCategory === 'deals') {
+    sizes = sizes.filter(s => s.size === '2kg');
   }
 
   // Search filter
@@ -498,13 +474,11 @@ function setShopCategory(cat, btnEl) {
   currentShopCategory = cat;
   const pills = document.querySelectorAll(".shop-filter-pill");
   pills.forEach(p => {
-    p.classList.remove("bg-[#1B4332]", "text-white", "active");
-    p.classList.add("bg-white", "text-stone-700", "border", "border-stone-200");
+    p.classList.remove("active");
   });
 
   if (btnEl) {
-    btnEl.classList.remove("bg-white", "text-stone-700", "border-stone-200");
-    btnEl.classList.add("bg-[#1B4332]", "text-white", "active");
+    btnEl.classList.add("active");
   }
 
   renderShopCards();
@@ -1039,17 +1013,17 @@ function handleCaptureGPS() {
       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
     </svg>
-    Detecting Exact GPS...
+    Detecting Doorstep Location...
   `;
 
   window.checkoutManager.captureGPSLocation(
     (location) => {
       btn.disabled = false;
-      btn.classList.remove("bg-amber-600", "hover:bg-amber-700");
+      btn.classList.remove("bg-[#1B4332]", "hover:bg-[#122E22]", "bg-amber-600", "hover:bg-amber-700");
       btn.classList.add("bg-emerald-600", "hover:bg-emerald-700");
       btn.innerHTML = `
         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-        GPS Location Verified ✓
+        <span id="gps-btn-text">Location Pinned ✓</span>
       `;
 
       statusBox.classList.remove("hidden");
@@ -1057,10 +1031,10 @@ function handleCaptureGPS() {
         <div class="flex items-start gap-2 text-xs text-emerald-900 bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl">
           <span class="text-sm">📍</span>
           <div>
-            <div class="font-bold">Location Captured (±${location.accuracy}m)</div>
+            <div class="font-bold">Doorstep Location Confirmed (±${location.accuracy}m)</div>
             <div class="text-[11px] text-emerald-800 line-clamp-2">${location.displayAddress}</div>
             <a href="${location.mapsUrl}" target="_blank" class="text-[10px] text-emerald-700 underline font-bold mt-0.5 inline-block">
-              View Google Maps Pin ↗
+              View Doorstep Map Pin ↗
             </a>
           </div>
         </div>
@@ -1079,13 +1053,15 @@ function handleCaptureGPS() {
         document.getElementById("checkout-pincode").value = location.pincode;
       }
 
-      showToast("GPS Location confirmed! 📍", "success");
+      showToast("Doorstep delivery location confirmed! 📍", "success");
     },
     (errorMsg) => {
       btn.disabled = false;
+      btn.classList.remove("bg-emerald-600", "hover:bg-emerald-700");
+      btn.classList.add("bg-[#1B4332]", "hover:bg-[#122E22]");
       btn.innerHTML = `
         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        Get Current Location (GPS)
+        <span id="gps-btn-text">Pin Delivery Location</span>
       `;
       showToast(errorMsg, "error");
     }
@@ -1288,9 +1264,26 @@ function syncUserProfile(customData = null) {
     } catch (e) {}
   }
 
-  const name = (profile && profile.name && profile.name.trim()) ? profile.name.trim() : "";
-  const phone = (profile && profile.phone && profile.phone.trim()) ? profile.phone.trim() : "";
-  const address = (profile && (profile.houseNo || profile.address)) ? (profile.houseNo || profile.address).trim() : "";
+  // Also check previous orders for any missing address fields
+  let lastOrder = null;
+  if (window.checkoutManager && typeof window.checkoutManager.getLastOrder === 'function') {
+    lastOrder = window.checkoutManager.getLastOrder();
+  }
+  if (!lastOrder) {
+    try {
+      const ords = JSON.parse(localStorage.getItem('beesbee_orders') || '[]');
+      if (ords.length > 0) lastOrder = ords[0];
+    } catch (e) {}
+  }
+
+  const name = (profile && profile.name && profile.name.trim()) || (lastOrder && lastOrder.customer && lastOrder.customer.name) || "";
+  const phone = (profile && profile.phone && profile.phone.trim()) || (lastOrder && lastOrder.customer && lastOrder.customer.phone) || "";
+  const houseNo = (profile && (profile.houseNo || profile.address)) ? (profile.houseNo || profile.address).trim() : (lastOrder && lastOrder.address && lastOrder.address.houseNo ? lastOrder.address.houseNo.trim() : "");
+  const area = (profile && profile.area && profile.area.trim()) || (lastOrder && lastOrder.address && lastOrder.address.area) || "";
+  const landmark = (profile && profile.landmark && profile.landmark.trim()) || (lastOrder && lastOrder.address && lastOrder.address.landmark) || "";
+  const pincode = (profile && profile.pincode && profile.pincode.trim()) || (lastOrder && lastOrder.address && lastOrder.address.pincode) || "";
+  const city = (profile && profile.city && profile.city.trim()) || (lastOrder && lastOrder.address && lastOrder.address.city) || "";
+  const state = (profile && profile.state && profile.state.trim()) || (lastOrder && lastOrder.address && lastOrder.address.state) || "";
 
   // 1. Sidebar User Name
   const sidebarName = document.getElementById("sidebar-user-name");
@@ -1302,7 +1295,10 @@ function syncUserProfile(customData = null) {
   const savedName = document.getElementById("saved-address-name-display");
   const savedAddr = document.getElementById("saved-address-details-display");
   if (savedName) savedName.textContent = name ? name : "Welcome Guest";
-  if (savedAddr) savedAddr.textContent = address ? address : "Address not set yet. Save details in your profile.";
+  if (savedAddr) {
+    const fullAddrString = [houseNo, area, landmark, pincode].filter(Boolean).join(", ");
+    savedAddr.textContent = fullAddrString ? fullAddrString : "Address not set yet. Save details in your profile.";
+  }
 
   // 3. Profile View Inputs
   const pName = document.getElementById("profile-edit-name");
@@ -1310,15 +1306,74 @@ function syncUserProfile(customData = null) {
   const pAddr = document.getElementById("profile-edit-address");
   if (pName && name) pName.value = name;
   if (pPhone && phone) pPhone.value = phone;
-  if (pAddr && address) pAddr.value = address;
+  if (pAddr && houseNo) pAddr.value = [houseNo, area, landmark].filter(Boolean).join(", ");
 
-  // 4. Checkout Modal Inputs
+  // 4. Checkout Modal Inputs (Pre-fill all address fields)
   const cName = document.getElementById("checkout-name");
   const cPhone = document.getElementById("checkout-phone");
   const cHouse = document.getElementById("checkout-house");
-  if (cName && !cName.value && name) cName.value = name;
-  if (cPhone && !cPhone.value && phone) cPhone.value = phone;
-  if (cHouse && !cHouse.value && address) cHouse.value = address;
+  const cArea = document.getElementById("checkout-area");
+  const cLandmark = document.getElementById("checkout-landmark");
+  const cPincode = document.getElementById("checkout-pincode");
+  const cCity = document.getElementById("checkout-city");
+  const cState = document.getElementById("checkout-state");
+
+  if (cName && name) cName.value = name;
+  if (cPhone && phone) cPhone.value = phone;
+  if (cHouse && houseNo) cHouse.value = houseNo;
+  if (cArea && area) cArea.value = area;
+  if (cLandmark && landmark) cLandmark.value = landmark;
+  if (cPincode && pincode) cPincode.value = pincode;
+  if (cCity && city) cCity.value = city;
+  if (cState && state) cState.value = state;
+
+  // 5. Restore Doorstep Delivery Location Pin for Returning Users
+  const savedLocationContainer = document.getElementById("saved-location-container");
+  const newLocationContainer = document.getElementById("new-location-container");
+  const savedLocationText = document.getElementById("saved-location-text");
+
+  const locationPin = (profile && profile.locationPin) || (lastOrder && lastOrder.address && lastOrder.address.gps);
+  if (locationPin) {
+    if (window.checkoutManager) {
+      window.checkoutManager.gpsLocation = locationPin;
+    }
+    if (savedLocationContainer && newLocationContainer) {
+      savedLocationContainer.classList.remove("hidden");
+      newLocationContainer.classList.add("hidden");
+      if (savedLocationText) {
+        const pinAddress = locationPin.displayAddress || [area, city].filter(Boolean).join(", ") || "Doorstep location confirmed";
+        savedLocationText.textContent = `${pinAddress}`;
+      }
+    }
+  } else {
+    if (savedLocationContainer && newLocationContainer) {
+      savedLocationContainer.classList.add("hidden");
+      newLocationContainer.classList.remove("hidden");
+    }
+  }
+}
+
+function toggleChangeLocationPin() {
+  const savedLocationContainer = document.getElementById("saved-location-container");
+  const newLocationContainer = document.getElementById("new-location-container");
+  if (newLocationContainer) {
+    newLocationContainer.classList.remove("hidden");
+  }
+  if (savedLocationContainer) {
+    savedLocationContainer.classList.add("hidden");
+  }
+  const btn = document.getElementById("gps-action-btn");
+  if (btn) {
+    btn.disabled = false;
+    btn.classList.remove("bg-emerald-600", "hover:bg-emerald-700");
+    btn.classList.add("bg-[#1B4332]", "hover:bg-[#122E22]");
+    btn.innerHTML = `
+      <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      <span id="gps-btn-text">Pin New Location</span>
+    `;
+  }
+  const statusBox = document.getElementById("gps-status-indicator");
+  if (statusBox) statusBox.classList.add("hidden");
 }
 
 function setupProfileData() {
@@ -1339,13 +1394,23 @@ function saveProfileViewData() {
     return;
   }
 
+  // Retain any existing location pin when updating profile
+  let existingPin = null;
+  if (window.checkoutManager && window.checkoutManager.gpsLocation) {
+    existingPin = window.checkoutManager.gpsLocation;
+  } else {
+    const existing = window.checkoutManager ? window.checkoutManager.getSavedProfile() : null;
+    if (existing && existing.locationPin) existingPin = existing.locationPin;
+  }
+
   const profileData = {
     name: name,
     phone: phone,
     houseNo: address,
     address: address,
     area: "",
-    landmark: ""
+    landmark: "",
+    locationPin: existingPin
   };
 
   if (window.checkoutManager) {
@@ -1483,18 +1548,30 @@ function openNotificationsModal() {
   if (!modal) return;
 
   const container = document.getElementById("notifications-list");
-  const announcements = window.BEESBEE_CONFIG.announcements;
+  const announcements = window.BEESBEE_CONFIG.announcements || [];
 
-  container.innerHTML = announcements.map(a => `
-    <div class="p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-2xl mb-2.5">
-      <div class="flex justify-between items-start">
-        <h5 class="text-xs font-bold text-stone-900">${a.title}</h5>
-        ${a.isNew ? '<span class="text-[9px] bg-red-500 text-white font-bold px-1.5 py-0.5 rounded">NEW</span>' : ''}
+  if (announcements.length === 0) {
+    container.innerHTML = `
+      <div class="py-12 text-center">
+        <div class="w-14 h-14 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-3 text-2xl border border-amber-200/60">
+          🔔
+        </div>
+        <h4 class="text-sm font-bold text-stone-800">No New Notifications</h4>
+        <p class="text-xs text-stone-500 mt-1 max-w-xs mx-auto">You're all caught up! New batch releases, discounts, and seasonal offers will appear here.</p>
       </div>
-      <p class="text-xs text-stone-600 mt-1 leading-relaxed">${a.message}</p>
-      <span class="text-[10px] text-stone-400 block mt-2">${a.date}</span>
-    </div>
-  `).join("");
+    `;
+  } else {
+    container.innerHTML = announcements.map(a => `
+      <div class="p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-2xl mb-2.5">
+        <div class="flex justify-between items-start">
+          <h5 class="text-xs font-bold text-stone-900">${a.title}</h5>
+          ${a.isNew ? '<span class="text-[9px] bg-red-500 text-white font-bold px-1.5 py-0.5 rounded">NEW</span>' : ''}
+        </div>
+        <p class="text-xs text-stone-600 mt-1 leading-relaxed">${a.message}</p>
+        <span class="text-[10px] text-stone-400 block mt-2">${a.date}</span>
+      </div>
+    `).join("");
+  }
 
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
@@ -1770,10 +1847,6 @@ function executePWAInstall() {
   }
 }
 
-// Override triggerPWAInstall to use the elegant in-app modal
-function triggerPWAInstall() {
-  openPWAInstallModal();
-}
 
 // Dummy points rewards modal removed - safe stubs
 function openRewardsModal() {
@@ -1848,3 +1921,4 @@ window.openRewardsModal = openRewardsModal;
 window.closeRewardsModal = closeRewardsModal;
 window.openAddressesModal = openAddressesModal;
 window.closeAddressesModal = closeAddressesModal;
+window.toggleChangeLocationPin = toggleChangeLocationPin;

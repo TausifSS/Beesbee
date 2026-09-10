@@ -80,13 +80,13 @@ class CheckoutManager {
       },
       (error) => {
         this.isLocating = false;
-        let msg = "Could not retrieve GPS location.";
+        let msg = "Could not retrieve delivery location pin.";
         if (error.code === error.PERMISSION_DENIED) {
-          msg = "GPS Location permission was denied. Please allow location access in your browser settings so we can accurately deliver your order.";
+          msg = "Location access was denied. Please allow location access in your browser settings so we can deliver your order to your doorstep.";
         } else if (error.code === error.POSITION_UNAVAILABLE) {
-          msg = "GPS location is unavailable on your device right now.";
+          msg = "Location is unavailable on your device right now.";
         } else if (error.code === error.TIMEOUT) {
-          msg = "GPS request timed out. Please tap 'Get My Current Location' again.";
+          msg = "Location request timed out. Please tap 'Pin Delivery Location' again.";
         }
         if (onError) onError(msg);
       },
@@ -107,6 +107,19 @@ class CheckoutManager {
   }
 
   /**
+   * Get the most recent saved order from local storage
+   */
+  getLastOrder() {
+    try {
+      const existing = localStorage.getItem("beesbee_orders");
+      const list = existing ? JSON.parse(existing) : [];
+      return list.length > 0 ? list[0] : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /**
    * Validate checkout inputs
    */
   validateOrderForm(formData) {
@@ -122,7 +135,20 @@ class CheckoutManager {
     }
 
     if (!this.gpsLocation) {
-      errors.push("GPS Location is mandatory! Please tap 'Get Current Location (GPS)' so our delivery team can reach you.");
+      // Auto-recover saved location pin from profile or previous order
+      const profile = this.getSavedProfile();
+      if (profile && profile.locationPin) {
+        this.gpsLocation = profile.locationPin;
+      } else {
+        const last = this.getLastOrder();
+        if (last && last.address && last.address.gps) {
+          this.gpsLocation = last.address.gps;
+        }
+      }
+    }
+
+    if (!this.gpsLocation) {
+      errors.push("Please pin your delivery location so our delivery partner can reach your doorstep.");
     }
 
     if (!formData.houseNo || formData.houseNo.trim().length < 1) {
@@ -239,7 +265,10 @@ class CheckoutManager {
       houseNo: formData.houseNo.trim(),
       area: formData.area.trim(),
       landmark: (formData.landmark || "").trim(),
-      pincode: formData.pincode || this.gpsLocation.pincode || ""
+      city: formData.city || (this.gpsLocation ? this.gpsLocation.city : "") || "",
+      state: formData.state || (this.gpsLocation ? this.gpsLocation.state : "") || "",
+      pincode: formData.pincode || (this.gpsLocation ? this.gpsLocation.pincode : "") || "",
+      locationPin: this.gpsLocation
     });
 
     // 3. If cart was used, clear cart
@@ -301,7 +330,7 @@ class CheckoutManager {
       msg += `${locationParts.join(', ')}\n`;
     }
 
-    msg += `\n🗺️ *LIVE GPS LOCATION PIN:*\n`;
+    msg += `\n📍 *DELIVERY LOCATION MAP:*\n`;
     msg += `${order.address.gps.mapsUrl}\n`;
     msg += `---------------------------------\n`;
     msg += `Please confirm my order. Pure Honey Straight From Nature! 🍯`;
