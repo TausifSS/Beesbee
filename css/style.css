@@ -159,3 +159,13 @@ h1, h2, h3, .font-heading {
 #pwa-install-banner {
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Silky Smooth Off-Canvas Drawer (Sidebar) */
+#mobile-sidebar-panel {
+  will-change: transform;
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+#mobile-sidebar-backdrop {
+  will-change: opacity;
+  transition: opacity 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}

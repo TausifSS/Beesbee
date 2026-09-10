@@ -286,38 +286,6 @@
         </div>
       </section>
 
-      <!-- CUSTOMER REVIEWS -->
-      <section class="mt-10 mb-8">
-        <div class="text-center mb-5">
-          <span class="text-xs font-bold text-amber-800 bg-amber-100/70 px-3 py-1 rounded-full uppercase tracking-wider">
-            Real Feedback
-          </span>
-          <h2 class="text-2xl font-bold font-heading text-[#2B1810] mt-1.5">
-            What Our Customers Say
-          </h2>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs">
-            <div class="flex text-amber-500 text-xs mb-2">★★★★★</div>
-            <p class="text-xs text-stone-700 italic">"Truly pure and natural honey. You can taste the genuine floral difference immediately!"</p>
-            <div class="text-[11px] font-bold text-stone-900 mt-3">— Ayesha K., Mumbai</div>
-          </div>
-
-          <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs">
-            <div class="flex text-amber-500 text-xs mb-2">★★★★★</div>
-            <p class="text-xs text-stone-700 italic">"My family loves BeesBee! Packaging in glass is great and delivery was super fast on WhatsApp."</p>
-            <div class="text-[11px] font-bold text-stone-900 mt-3">— Imran S., Bengaluru</div>
-          </div>
-
-          <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-xs">
-            <div class="flex text-amber-500 text-xs mb-2">★★★★★</div>
-            <p class="text-xs text-stone-700 italic">"Finally real raw honey without added sugar syrup. Highly recommended for daily morning water."</p>
-            <div class="text-[11px] font-bold text-stone-900 mt-3">— Sara M., Hyderabad</div>
-          </div>
-        </div>
-      </section>
-
       <!-- Clean Brand Footer -->
       <footer class="bg-[#2B1810] text-amber-100/80 pt-8 pb-20 text-xs text-center border-t border-white/10 mt-12 rounded-3xl">
         <div class="max-w-4xl mx-auto px-4">
@@ -1109,8 +1077,18 @@
   </div>
 
   <!-- 11. RECREATED MOBILE SIDEBAR DRAWER (Matching Image 1 Reference) -->
-  <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 modal-backdrop flex">
-    <div class="bg-[#FAF7F2] w-80 max-w-[85vw] h-full shadow-2xl flex flex-col justify-between overflow-y-auto">
+  <div id="mobile-sidebar" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
+    <!-- Smooth backdrop -->
+    <div 
+      id="mobile-sidebar-backdrop" 
+      onclick="closeSidebar()" 
+      class="fixed inset-0 bg-stone-900/60 backdrop-blur-xs opacity-0 transition-opacity duration-300 pointer-events-none">
+    </div>
+
+    <!-- Sliding panel with hardware-accelerated smooth slide in/out -->
+    <div 
+      id="mobile-sidebar-panel" 
+      class="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] h-full bg-[#FAF7F2] shadow-2xl flex flex-col justify-between overflow-y-auto -translate-x-full transition-transform duration-300 ease-out z-10 pointer-events-auto">
       
       <div class="p-5 pb-3">
         <!-- Top Close Button -->
