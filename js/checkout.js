@@ -330,6 +330,9 @@ class CheckoutManager {
   saveUserProfile(profile) {
     try {
       localStorage.setItem("beesbee_profile", JSON.stringify(profile));
+      if (typeof window.syncUserProfile === 'function') {
+        window.syncUserProfile(profile);
+      }
     } catch (e) {
       console.warn("Failed to save profile", e);
     }

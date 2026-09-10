@@ -149,10 +149,16 @@ h1, h2, h3, .font-heading {
 
 /* Bottom Nav Classic Active Indicator */
 .nav-tab.active {
-  color: #D97706;
+  color: #D97706 !important;
 }
 .nav-tab.active svg {
-  stroke: #D97706;
+  stroke: #D97706 !important;
+}
+.nav-tab:not(.active) {
+  color: #78716c;
+}
+.nav-tab:not(.active) svg {
+  stroke: #78716c;
 }
 
 /* PWA Install Banner */
@@ -160,12 +166,34 @@ h1, h2, h3, .font-heading {
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Silky Smooth Off-Canvas Drawer (Sidebar) */
+/* Silky Smooth Off-Canvas Drawer (Sidebar) Hardware-Accelerated */
 #mobile-sidebar-panel {
   will-change: transform;
-  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translate3d(-100%, 0, 0);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#mobile-sidebar-panel.translate-x-0 {
+  transform: translate3d(0, 0, 0) !important;
 }
 #mobile-sidebar-backdrop {
   will-change: opacity;
-  transition: opacity 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Wishlist Heart Button */
+.wishlist-btn {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s;
+}
+.wishlist-btn:hover {
+  transform: scale(1.1);
+}
+.wishlist-btn:active {
+  transform: scale(0.9);
+}
+.wishlist-btn.active svg {
+  fill: #e11d48;
+  stroke: #e11d48;
+  color: #e11d48;
 }

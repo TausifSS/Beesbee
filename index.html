@@ -55,7 +55,7 @@
   </script>
 
   <!-- Custom Styles -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=3.0">
   <link rel="icon" type="image/png" href="assets/images/logo.png">
 </head>
 <body class="bg-[#FAF7F2] text-[#2B1810] antialiased selection:bg-amber-200 selection:text-amber-900 safe-bottom-padding">
@@ -126,6 +126,17 @@
           aria-label="Notifications">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
           <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500 ring-2 ring-white"></span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="openWishlistModal()" 
+          class="p-2 rounded-xl text-stone-700 hover:bg-stone-100 transition-colors relative"
+          aria-label="Wishlist">
+          <svg class="w-5 h-5 text-stone-700 hover:text-rose-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          <span id="wishlist-header-badge" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
+            0
+          </span>
         </button>
 
         <button 
@@ -422,16 +433,16 @@
       </div>
 
       <!-- Filter Pills -->
-      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 mb-4">
-        <button class="px-3.5 py-1.5 bg-[#1B4332] text-white text-xs font-bold rounded-full whitespace-nowrap shadow-xs">All Offers</button>
-        <button class="px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 text-xs font-bold rounded-full whitespace-nowrap">Combo Offers</button>
-        <button class="px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 text-xs font-bold rounded-full whitespace-nowrap">Seasonal</button>
-        <button class="px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 text-xs font-bold rounded-full whitespace-nowrap">First Order</button>
-        <button class="px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 text-xs font-bold rounded-full whitespace-nowrap">Free Delivery</button>
+      <div id="offer-filter-pills" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 mb-4">
+        <button onclick="filterOffersCategory('all', this)" class="offer-pill active px-3.5 py-1.5 bg-[#1B4332] text-white text-xs font-bold rounded-full whitespace-nowrap shadow-xs transition-colors">All Offers</button>
+        <button onclick="filterOffersCategory('combo', this)" class="offer-pill px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 text-xs font-bold rounded-full whitespace-nowrap transition-colors">Combo Offers</button>
+        <button onclick="filterOffersCategory('seasonal', this)" class="offer-pill px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 text-xs font-bold rounded-full whitespace-nowrap transition-colors">Seasonal</button>
+        <button onclick="filterOffersCategory('first-order', this)" class="offer-pill px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 text-xs font-bold rounded-full whitespace-nowrap transition-colors">First Order</button>
+        <button onclick="filterOffersCategory('free-delivery', this)" class="offer-pill px-3.5 py-1.5 bg-white text-stone-700 border border-stone-200 text-xs font-bold rounded-full whitespace-nowrap transition-colors">Free Delivery</button>
       </div>
 
       <!-- Featured Deal Card: Buy 2kg Get 250g FREE -->
-      <div class="bg-gradient-to-r from-[#FFF9EE] via-[#FDF3DE] to-[#F7E7C8] rounded-3xl p-5 border border-amber-200 shadow-sm relative mb-5">
+      <div data-offer-cat="combo seasonal" class="offer-card bg-gradient-to-r from-[#FFF9EE] via-[#FDF3DE] to-[#F7E7C8] rounded-3xl p-5 border border-amber-200 shadow-sm relative mb-5 transition-all">
         <span class="bg-[#B45309] text-white text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-md tracking-wide">
           👑 BEST VALUE
         </span>
@@ -460,9 +471,9 @@
       </div>
 
       <!-- 2x2 Grid of Offer Deals -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div id="offer-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Deal 1 -->
-        <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-xs flex flex-col justify-between">
+        <div data-offer-cat="combo" class="offer-card bg-white rounded-2xl p-4 border border-stone-200 shadow-xs flex flex-col justify-between transition-all">
           <div>
             <span class="bg-amber-100 text-amber-900 text-[10px] font-bold px-2 py-0.5 rounded">🍴 FAMILY COMBO</span>
             <h4 class="font-bold text-sm text-stone-900 mt-1.5">1kg + 500g Special Combo</h4>
@@ -480,7 +491,7 @@
         </div>
 
         <!-- Deal 2 -->
-        <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-xs flex flex-col justify-between">
+        <div data-offer-cat="combo seasonal" class="offer-card bg-white rounded-2xl p-4 border border-stone-200 shadow-xs flex flex-col justify-between transition-all">
           <div>
             <span class="bg-amber-100 text-amber-900 text-[10px] font-bold px-2 py-0.5 rounded">🍯 STOCK UP DEAL</span>
             <h4 class="font-bold text-sm text-stone-900 mt-1.5">2 × 1kg Better Together</h4>
@@ -498,7 +509,7 @@
         </div>
 
         <!-- Deal 3: Coupon Code -->
-        <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-xs flex flex-col justify-between">
+        <div data-offer-cat="first-order" class="offer-card bg-white rounded-2xl p-4 border border-stone-200 shadow-xs flex flex-col justify-between transition-all">
           <div>
             <span class="bg-red-100 text-red-800 text-[10px] font-bold px-2 py-0.5 rounded">🎁 FIRST ORDER OFFER</span>
             <h4 class="font-bold text-sm text-stone-900 mt-1.5">₹100 OFF on Your First Order</h4>
@@ -512,14 +523,14 @@
               </button>
             </div>
           </div>
-          <button onclick="scrollToProducts()" class="mt-4 w-full forest-btn text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5">
+          <button onclick="switchView('shop')" class="mt-4 w-full forest-btn text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5">
             <span>Shop Now</span>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </button>
         </div>
 
         <!-- Deal 4: Free Delivery -->
-        <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-xs flex flex-col justify-between">
+        <div data-offer-cat="free-delivery" class="offer-card bg-white rounded-2xl p-4 border border-stone-200 shadow-xs flex flex-col justify-between transition-all">
           <div>
             <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">🚚 FREE DELIVERY</span>
             <h4 class="font-bold text-sm text-stone-900 mt-1.5">Free Delivery On All Jars</h4>
@@ -528,7 +539,7 @@
               ₹0 Delivery Fee Guaranteed
             </div>
           </div>
-          <button onclick="scrollToProducts()" class="mt-4 w-full forest-btn text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5">
+          <button onclick="switchView('shop')" class="mt-4 w-full forest-btn text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5">
             <span>Start Shopping</span>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </button>
@@ -581,7 +592,7 @@
         <div class="mt-6 pt-6 border-t border-stone-100 text-center">
           <h4 class="font-bold text-xs text-stone-900">Need Help?</h4>
           <p class="text-[11px] text-stone-500 mt-0.5 mb-3">Our honey experts are available on WhatsApp.</p>
-          <a href="https://wa.me/919876543210?text=Hi%20BeesBee!%20I%20need%20help%20with%20my%20order." target="_blank" class="w-full whatsapp-btn font-bold text-xs py-2.5 rounded-xl inline-flex items-center justify-center gap-2">
+          <a href="https://wa.me/919561762651?text=Hi%20BeesBee!%20I%20need%20help%20with%20my%20order." target="_blank" class="w-full whatsapp-btn font-bold text-xs py-2.5 rounded-xl inline-flex items-center justify-center gap-2">
             <span>Chat on WhatsApp</span>
           </a>
         </div>
@@ -601,7 +612,7 @@
       id="tab-btn-home" 
       onclick="switchView('home')" 
       class="nav-tab active flex flex-col items-center py-1 text-[#D97706] focus:outline-none transition-colors">
-      <svg class="w-5 h-5 mb-0.5 stroke-[#D97706]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
       <span class="text-[10px] font-bold">Home</span>
     </button>
 
@@ -778,7 +789,7 @@
 
         <div>
           <label class="block text-xs font-bold text-stone-800 mb-1">WhatsApp Phone Number <span class="text-red-500">*</span></label>
-          <input type="tel" id="checkout-phone" placeholder="e.g. 9876543210 (10 digits)" class="w-full text-xs p-2.5 rounded-xl border border-stone-300 focus:border-amber-500 outline-none" />
+          <input type="tel" id="checkout-phone" placeholder="e.g. 9561762651 (10 digits)" class="w-full text-xs p-2.5 rounded-xl border border-stone-300 focus:border-amber-500 outline-none" />
         </div>
 
         <!-- MANDATORY GPS BUTTON -->
@@ -860,7 +871,17 @@
           <span class="text-[10px] font-extrabold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full uppercase">100% Raw Forest Honey</span>
           <h3 id="modal-prod-title" class="text-lg font-bold font-heading text-stone-900 mt-1"></h3>
         </div>
-        <button onclick="closeProductDetailModal()" class="text-stone-400 hover:text-stone-700 text-lg">✕</button>
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            id="modal-wishlist-btn"
+            onclick="toggleWishlist(currentModalSelectedSize, event)" 
+            class="wishlist-btn p-1 text-stone-400 hover:text-rose-500 transition-colors" 
+            aria-label="Wishlist">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+          <button onclick="closeProductDetailModal()" class="text-stone-400 hover:text-stone-700 text-lg">✕</button>
+        </div>
       </div>
 
       <div class="flex justify-center my-4 bg-[#FAF7F2] rounded-2xl p-4">
@@ -987,33 +1008,8 @@
         </div>
         <button onclick="closeWishlistModal()" class="text-stone-400 hover:text-stone-700 text-lg">✕</button>
       </div>
-      <div class="py-3 space-y-3 flex-1 overflow-y-auto">
-        <!-- Wishlist Item 1 -->
-        <div class="flex items-center justify-between p-3 bg-stone-50 rounded-2xl border border-stone-200/70">
-          <div class="flex items-center gap-3">
-            <img src="assets/images/jar_1kg.png" alt="1kg Honey" class="w-12 h-12 object-contain" />
-            <div>
-              <div class="font-bold text-xs text-stone-900">BeesBee Pure Honey (1kg)</div>
-              <div class="text-[11px] text-amber-800 font-bold">₹649 <span class="text-[10px] text-stone-400 line-through">₹749</span></div>
-            </div>
-          </div>
-          <button onclick="handleAddToCart('1kg'); closeWishlistModal(); openCartDrawer();" class="bg-[#1B4332] text-white text-[10px] font-bold py-1.5 px-3 rounded-xl shadow-xs">
-            + Add to Cart
-          </button>
-        </div>
-        <!-- Wishlist Item 2 -->
-        <div class="flex items-center justify-between p-3 bg-stone-50 rounded-2xl border border-stone-200/70">
-          <div class="flex items-center gap-3">
-            <img src="assets/images/jar_2kg.png" alt="2kg Honey" class="w-12 h-12 object-contain" />
-            <div>
-              <div class="font-bold text-xs text-stone-900">BeesBee Pure Honey (2kg)</div>
-              <div class="text-[11px] text-amber-800 font-bold">₹1,199 <span class="text-[10px] text-emerald-700 font-bold">Free 250g Deal</span></div>
-            </div>
-          </div>
-          <button onclick="handleAddToCart('2kg'); closeWishlistModal(); openCartDrawer();" class="bg-[#1B4332] text-white text-[10px] font-bold py-1.5 px-3 rounded-xl shadow-xs">
-            + Add to Cart
-          </button>
-        </div>
+      <div id="wishlist-items-container" class="py-3 space-y-3 flex-1 overflow-y-auto">
+        <!-- Dynamically rendered by renderWishlistModal() -->
       </div>
     </div>
   </div>
@@ -1032,9 +1028,9 @@
         <div class="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-2xl">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-bold uppercase bg-emerald-800 text-white px-2 py-0.5 rounded">Default Address</span>
-            <button onclick="openProfileView(); closeAddressesModal();" class="text-xs font-bold text-amber-800 hover:underline">Edit</button>
+            <button onclick="closeAddressesModal(); switchView('profile');" class="text-xs font-bold text-amber-800 hover:underline">Edit</button>
           </div>
-          <div class="font-bold text-xs text-stone-900 mt-2" id="saved-address-name-display">Tausif Shaikh</div>
+          <div class="font-bold text-xs text-stone-900 mt-2" id="saved-address-name-display">Welcome Guest</div>
           <div class="text-[11px] text-stone-600 mt-0.5" id="saved-address-details-display">Address not set yet. Save details in your profile.</div>
         </div>
         <button onclick="closeAddressesModal(); switchView('profile');" class="w-full py-2.5 bg-[#1B4332] text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2">
@@ -1045,32 +1041,31 @@
     </div>
   </div>
 
-  <!-- 10. REWARDS MODAL -->
-  <div id="rewards-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-3xl p-5 shadow-2xl border border-stone-200 max-h-[85vh] flex flex-col">
-      <div class="flex justify-between items-center pb-2 border-b border-stone-100">
-        <div class="flex items-center gap-2">
-          <span class="text-xl">👑</span>
-          <h3 class="font-bold text-base text-stone-900 font-heading">BeesBee Rewards</h3>
-        </div>
-        <button onclick="closeRewardsModal()" class="text-stone-400 hover:text-stone-700 text-lg">✕</button>
+  <!-- 10. PWA INSTALL MODAL -->
+  <div id="pwa-install-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-stone-200 text-center relative">
+      <button onclick="closePWAInstallModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 text-lg">✕</button>
+      <div class="w-16 h-16 bg-emerald-50 rounded-2xl border border-emerald-100 flex items-center justify-center mx-auto mb-3">
+        <img src="assets/images/logo.png" alt="BeesBee" class="h-10 object-contain" />
       </div>
-      <div class="py-4 text-center">
-        <div class="w-16 h-16 bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 font-black text-2xl rounded-full flex items-center justify-center mx-auto shadow-md">
-          100
+      <h3 class="text-lg font-bold font-heading text-stone-900">Install BeesBee App</h3>
+      <p class="text-xs text-stone-500 mt-1 max-w-xs mx-auto">Install BeesBee on your home screen for quick 1-tap ordering, real-time WhatsApp updates, and lightning fast access.</p>
+      
+      <div class="mt-4 p-3 bg-amber-50/70 rounded-2xl border border-amber-200/60 text-left text-xs text-amber-950 space-y-1">
+        <div class="font-bold text-amber-900 flex items-center gap-1.5">
+          <span>🍯</span> Why install BeesBee:
         </div>
-        <h4 class="font-bold text-sm text-stone-900 mt-2">Available Honey Points</h4>
-        <p class="text-xs text-stone-500 mt-1">Welcome bonus credited to your account!</p>
+        <div>• Fast 1-tap checkout with saved address</div>
+        <div>• Instant direct WhatsApp order routing</div>
+        <div>• Works offline & zero app store downloads</div>
+      </div>
 
-        <div class="mt-4 p-3 bg-amber-50 rounded-2xl border border-amber-200 text-left text-xs text-amber-900 space-y-1.5">
-          <div class="font-bold">✨ How to use your rewards:</div>
-          <div>• Earn 50 points with every 1kg or 2kg jar ordered</div>
-          <div>• Redeem 200 points for a FREE 250g honey jar on WhatsApp</div>
-          <div>• Instant ₹100 discount coupon code: <span class="font-mono font-bold bg-white px-1.5 py-0.5 rounded border border-amber-300 text-amber-950">WELCOME100</span></div>
-        </div>
-
-        <button onclick="closeRewardsModal(); switchView('shop');" class="mt-5 w-full bg-[#1B4332] text-white font-bold text-xs py-3 rounded-xl">
-          Shop & Earn More Points
+      <div class="mt-5 space-y-2">
+        <button onclick="executePWAInstall()" class="w-full forest-btn font-bold text-xs py-3.5 rounded-xl shadow-md flex items-center justify-center gap-2">
+          <span>📲 Install Now</span>
+        </button>
+        <button onclick="closePWAInstallModal()" class="w-full text-stone-500 hover:text-stone-800 text-xs font-bold py-2 transition-colors">
+          Maybe Later
         </button>
       </div>
     </div>
@@ -1082,7 +1077,7 @@
     <div 
       id="mobile-sidebar-backdrop" 
       onclick="closeSidebar()" 
-      class="fixed inset-0 bg-stone-900/60 backdrop-blur-xs opacity-0 transition-opacity duration-300 pointer-events-none">
+      class="fixed inset-0 bg-stone-900/60 backdrop-blur-xs opacity-0 transition-opacity duration-300 pointer-events-none cursor-pointer">
     </div>
 
     <!-- Sliding panel with hardware-accelerated smooth slide in/out -->
@@ -1110,13 +1105,9 @@
               <svg class="w-6 h-6 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
             </div>
             <div>
-              <div class="text-[11px] text-stone-500 font-medium leading-none">Assalamu Alaikum,</div>
-              <div id="sidebar-user-name" class="font-extrabold text-sm text-stone-900 mt-0.5">Tausif Shaikh</div>
-              <div class="text-[10px] text-stone-500 mt-0.5 font-medium leading-tight">Good choices lead to a healthier tomorrow 🌿</div>
+              <div id="sidebar-user-name" class="font-extrabold text-sm text-stone-900 leading-tight">Welcome Guest</div>
+              <div class="text-[10px] text-stone-500 mt-1 font-medium leading-tight">Good choices lead to a healthier tomorrow 🌿</div>
             </div>
-          </div>
-          <div class="shrink-0 -mr-2">
-            <img src="assets/images/honey_dipper_drip.png" alt="Honey" class="w-12 h-12 object-contain opacity-90" />
           </div>
         </div>
 
@@ -1155,10 +1146,13 @@
             <span>My Orders</span>
           </button>
 
-          <!-- My Wishlist -->
-          <button onclick="closeSidebar(); openWishlistModal();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 text-left transition-colors">
-            <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-            <span>My Wishlist</span>
+          <!-- My Wishlist with Badge -->
+          <button onclick="closeSidebar(); openWishlistModal();" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+              <span>My Wishlist</span>
+            </div>
+            <span id="wishlist-sidebar-badge" class="hidden bg-rose-100 text-rose-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">0</span>
           </button>
 
           <!-- My Addresses -->
@@ -1167,19 +1161,10 @@
             <span>My Addresses</span>
           </button>
 
-          <!-- BeesBee Rewards -->
-          <button onclick="closeSidebar(); openRewardsModal();" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-emerald-50 text-left transition-colors">
-            <div class="flex items-center gap-3">
-              <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <span>BeesBee Rewards</span>
-            </div>
-            <span class="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-extrabold px-2 py-0.5 rounded-full">100 Points</span>
-          </button>
-
           <div class="pt-2 border-t border-stone-200 my-1"></div>
 
           <!-- Help & Support -->
-          <a href="https://wa.me/919876543210?text=Hi%20BeesBee!%20I%20need%20help%20with%20pure%20honey%20orders." target="_blank" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-50 text-left transition-colors">
+          <a href="https://wa.me/919561762651?text=Hi%20BeesBee!%20I%20need%20help%20with%20pure%20honey%20orders." target="_blank" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-50 text-left transition-colors">
             <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
             <span>Help & Support</span>
           </a>
@@ -1197,7 +1182,7 @@
           </button>
 
           <!-- Install App Button in Sidebar -->
-          <button onclick="closeSidebar(); triggerPWAInstall();" class="w-full mt-2 bg-amber-50 text-amber-900 border border-amber-200 font-extrabold flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left">
+          <button onclick="closeSidebar(); openPWAInstallModal();" class="w-full mt-2 bg-amber-50 text-amber-900 border border-amber-200 font-extrabold flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left hover:bg-amber-100 transition-colors">
             <svg class="w-4 h-4 text-amber-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             <span>📲 Install BeesBee App</span>
           </button>
@@ -1219,27 +1204,23 @@
 
       </div>
 
-      <!-- Bottom Section Matching Image 1: Log Out & Script Tagline -->
+      <!-- Bottom Section Matching Image 1: Log Out -->
       <div class="p-5 pt-3 border-t border-stone-200 bg-white/60 flex items-center justify-between">
         <button onclick="handleLogout()" class="text-rose-600 font-bold text-xs flex items-center gap-2 hover:text-rose-700 transition-colors">
           <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
           <span>Log Out</span>
         </button>
-
-        <div class="text-right">
-          <img src="assets/images/sidebar_flourish.png" alt="Pure Natural Trusted" class="h-8 object-contain" />
-        </div>
       </div>
 
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script src="js/config.js"></script>
-  <script src="js/products.js"></script>
-  <script src="js/cart.js"></script>
-  <script src="js/checkout.js"></script>
-  <script src="js/orders.js"></script>
-  <script src="js/app.js"></script>
+  <!-- Scripts with Cache-Busting -->
+  <script src="js/config.js?v=3.0"></script>
+  <script src="js/products.js?v=3.0"></script>
+  <script src="js/cart.js?v=3.0"></script>
+  <script src="js/checkout.js?v=3.0"></script>
+  <script src="js/orders.js?v=3.0"></script>
+  <script src="js/app.js?v=3.0"></script>
 </body>
 </html>

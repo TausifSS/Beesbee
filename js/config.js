@@ -8,8 +8,8 @@ const CONFIG = {
     name: "BeesBee",
     tagline: "Pure Honey. Straight From Nature.",
     description: "100% Raw, Unpasteurized & Pure Natural Honey collected straight from pristine natural apiaries and delivered to your doorstep.",
-    whatsappNumber: "919876543210", // Default business WhatsApp number (country code without +)
-    displayPhone: "+91 98765 43210",
+    whatsappNumber: "919561762651", // Default business WhatsApp number (country code without +)
+    displayPhone: "+91 95617 62651",
     email: "support@beesbee.com",
     address: "BeesBee Apiaries & Natural Farms, Western Ghats Valley",
     operatingHours: "Monday - Sunday: 9:00 AM - 8:00 PM",

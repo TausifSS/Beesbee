@@ -18,7 +18,8 @@ function initApp() {
   renderVideoSection();
   setupEventListeners();
   updateCartBadge();
-  setupProfileData();
+  updateWishlistBadges();
+  syncUserProfile();
   initHistoryHandling();
 }
 
@@ -67,7 +68,7 @@ function closeAnyActiveOverlay() {
   const overlayIds = [
     'wishlist-modal',
     'addresses-modal',
-    'rewards-modal',
+    'pwa-install-modal',
     'checkout-modal',
     'product-detail-modal',
     'video-modal',
@@ -93,8 +94,12 @@ function closeAnyActiveOverlay() {
  */
 function initPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js')
-      .then((reg) => console.log('BeesBee Service Worker registered with scope:', reg.scope))
+    navigator.serviceWorker.register('./sw.js?v=3.0')
+      .then((reg) => {
+        console.log('BeesBee Service Worker registered with scope:', reg.scope);
+        // Force check for updates to guarantee mobile Chrome gets latest code
+        if (typeof reg.update === 'function') reg.update();
+      })
       .catch((err) => console.warn('Service Worker registration failed:', err));
   }
 
@@ -165,7 +170,7 @@ function switchView(viewName, pushHistory = true) {
     pushHistoryState({ view: viewName });
   }
 
-  const views = ['home', 'shop', 'orders', 'offers', 'profile'];
+  const views = ['home', 'shop', 'offers', 'orders', 'profile'];
   views.forEach(v => {
     const el = document.getElementById(`view-${v}`);
     if (el) {
@@ -179,15 +184,11 @@ function switchView(viewName, pushHistory = true) {
     const tabBtn = document.getElementById(`tab-btn-${v}`);
     if (tabBtn) {
       if (v === viewName) {
-        tabBtn.classList.add("text-[#D97706]");
+        tabBtn.classList.add("active", "text-[#D97706]");
         tabBtn.classList.remove("text-stone-500");
-        const svg = tabBtn.querySelector("svg");
-        if (svg) svg.classList.add("text-[#D97706]", "stroke-[#D97706]");
       } else {
-        tabBtn.classList.remove("text-[#D97706]");
+        tabBtn.classList.remove("active", "text-[#D97706]");
         tabBtn.classList.add("text-stone-500");
-        const svg = tabBtn.querySelector("svg");
-        if (svg) svg.classList.remove("text-[#D97706]", "stroke-[#D97706]");
       }
     }
 
@@ -257,7 +258,9 @@ function renderProductCards(filterSize = null) {
     sizes = sizes.filter(s => s.size.toLowerCase() === filterSize.toLowerCase());
   }
 
-  grid.innerHTML = sizes.map(item => `
+  grid.innerHTML = sizes.map(item => {
+    const wishlisted = isWishlisted(item.size);
+    return `
     <div class="bg-white rounded-2xl p-4 honey-card-shadow border border-[#F0EBE1] flex flex-col justify-between hover:border-amber-400 transition-all duration-300 group">
       <!-- Image & Badges Area -->
       <div class="relative bg-[#FBF9F4] rounded-xl p-3 flex items-center justify-center min-h-[165px] overflow-hidden cursor-pointer" onclick="openProductDetailModal('${item.size}')">
@@ -271,6 +274,16 @@ function renderProductCards(filterSize = null) {
             Popular
           </span>
         ` : ''}
+
+        <!-- Wishlist Heart Button -->
+        <button 
+          type="button" 
+          onclick="toggleWishlist('${item.size}', event)" 
+          data-size="${item.size}"
+          class="wishlist-btn absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur-xs border border-stone-200/80 flex items-center justify-center shadow-xs z-10 ${wishlisted ? 'active' : ''}" 
+          aria-label="Save to Wishlist">
+          <svg class="w-3.5 h-3.5 ${wishlisted ? 'text-rose-500 fill-rose-500' : 'text-stone-400'}" fill="${wishlisted ? '#e11d48' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </button>
 
         <img 
           src="${item.image}" 
@@ -336,7 +349,8 @@ function renderProductCards(filterSize = null) {
         </div>
       </div>
     </div>
-  `).join("");
+  `;
+  }).join("");
 }
 
 /**
@@ -388,19 +402,31 @@ function renderShopCards() {
     return;
   }
 
-  grid.innerHTML = sizes.map(item => `
+  grid.innerHTML = sizes.map(item => {
+    const wishlisted = isWishlisted(item.size);
+    return `
     <div class="bg-white rounded-2xl p-3 sm:p-4 border border-stone-200/90 shadow-2xs flex flex-col justify-between hover:border-amber-400 transition-all duration-300 group">
       <div>
-        <!-- Badges Bar -->
+        <!-- Badges Bar & Wishlist -->
         <div class="flex items-center justify-between">
           <span class="bg-amber-100 text-amber-900 text-[11px] font-extrabold px-2.5 py-0.5 rounded-md">
             ${item.size}
           </span>
-          ${item.size === '2kg' ? `
-            <span class="bg-[#1B4332] text-amber-200 text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-md">
-              BEST VALUE
-            </span>
-          ` : ''}
+          <div class="flex items-center gap-1.5">
+            ${item.size === '2kg' ? `
+              <span class="bg-[#1B4332] text-amber-200 text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-md">
+                BEST VALUE
+              </span>
+            ` : ''}
+            <button 
+              type="button" 
+              onclick="toggleWishlist('${item.size}', event)" 
+              data-size="${item.size}"
+              class="wishlist-btn w-6 h-6 rounded-full bg-stone-50 border border-stone-200/70 flex items-center justify-center shadow-2xs hover:bg-white transition-all ${wishlisted ? 'active' : ''}" 
+              aria-label="Save to Wishlist">
+              <svg class="w-3 h-3 ${wishlisted ? 'text-rose-500 fill-rose-500' : 'text-stone-400'}" fill="${wishlisted ? '#e11d48' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </button>
+          </div>
         </div>
 
         <!-- Jar Image -->
@@ -459,7 +485,8 @@ function renderShopCards() {
         </div>
       </div>
     </div>
-  `).join("");
+  `;
+  }).join("");
 }
 
 function handleShopSearch(val) {
@@ -673,9 +700,33 @@ function openProductDetailModal(initialSize = "500g") {
     </button>
   `).join("");
 
+  updateModalWishlistBtn(initialSize);
+
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
   pushHistoryState({ modal: 'product-detail-modal' });
+}
+
+function updateModalWishlistBtn(size) {
+  const btn = document.getElementById("modal-wishlist-btn");
+  if (!btn) return;
+  const wishlisted = isWishlisted(size);
+  const svg = btn.querySelector("svg");
+  if (wishlisted) {
+    btn.classList.add("active");
+    if (svg) {
+      svg.classList.remove("text-stone-400");
+      svg.classList.add("text-rose-500", "fill-rose-500");
+      svg.setAttribute("fill", "#e11d48");
+    }
+  } else {
+    btn.classList.remove("active");
+    if (svg) {
+      svg.classList.add("text-stone-400");
+      svg.classList.remove("text-rose-500", "fill-rose-500");
+      svg.setAttribute("fill", "none");
+    }
+  }
 }
 
 function selectModalSize(size) {
@@ -697,6 +748,8 @@ function selectModalSize(size) {
       pill.classList.remove("active");
     }
   });
+
+  updateModalWishlistBtn(size);
 }
 
 function closeProductDetailModal() {
@@ -1220,57 +1273,94 @@ function handleSearchOrderById() {
 }
 
 /**
- * Pre-fill profile fields
+ * Synchronize User Profile & Address Data Across the Whole App
+ * Sets user's name in Sidebar, Profile view, Address modal, and Checkout
  */
+function syncUserProfile(customData = null) {
+  let profile = customData;
+  if (!profile && window.checkoutManager) {
+    profile = window.checkoutManager.getSavedProfile();
+  }
+  if (!profile) {
+    try {
+      const raw = localStorage.getItem('beesbee_profile');
+      if (raw) profile = JSON.parse(raw);
+    } catch (e) {}
+  }
+
+  const name = (profile && profile.name && profile.name.trim()) ? profile.name.trim() : "";
+  const phone = (profile && profile.phone && profile.phone.trim()) ? profile.phone.trim() : "";
+  const address = (profile && (profile.houseNo || profile.address)) ? (profile.houseNo || profile.address).trim() : "";
+
+  // 1. Sidebar User Name
+  const sidebarName = document.getElementById("sidebar-user-name");
+  if (sidebarName) {
+    sidebarName.textContent = name ? name : "Welcome Guest";
+  }
+
+  // 2. Saved Address Displays in Address Modal
+  const savedName = document.getElementById("saved-address-name-display");
+  const savedAddr = document.getElementById("saved-address-details-display");
+  if (savedName) savedName.textContent = name ? name : "Welcome Guest";
+  if (savedAddr) savedAddr.textContent = address ? address : "Address not set yet. Save details in your profile.";
+
+  // 3. Profile View Inputs
+  const pName = document.getElementById("profile-edit-name");
+  const pPhone = document.getElementById("profile-edit-phone");
+  const pAddr = document.getElementById("profile-edit-address");
+  if (pName && name) pName.value = name;
+  if (pPhone && phone) pPhone.value = phone;
+  if (pAddr && address) pAddr.value = address;
+
+  // 4. Checkout Modal Inputs
+  const cName = document.getElementById("checkout-name");
+  const cPhone = document.getElementById("checkout-phone");
+  const cHouse = document.getElementById("checkout-house");
+  if (cName && !cName.value && name) cName.value = name;
+  if (cPhone && !cPhone.value && phone) cPhone.value = phone;
+  if (cHouse && !cHouse.value && address) cHouse.value = address;
+}
+
 function setupProfileData() {
-  const profile = window.checkoutManager.getSavedProfile();
-  if (!profile) return;
-
-  const nameInput = document.getElementById("checkout-name");
-  const phoneInput = document.getElementById("checkout-phone");
-  const houseInput = document.getElementById("checkout-house");
-  const areaInput = document.getElementById("checkout-area");
-  const landmarkInput = document.getElementById("checkout-landmark");
-
-  if (nameInput && !nameInput.value) nameInput.value = profile.name || "";
-  if (phoneInput && !phoneInput.value) phoneInput.value = profile.phone || "";
-  if (houseInput && !houseInput.value) houseInput.value = profile.houseNo || "";
-  if (areaInput && !areaInput.value) areaInput.value = profile.area || "";
-  if (landmarkInput && !landmarkInput.value) landmarkInput.value = profile.landmark || "";
-
-  // Update Profile View display
-  const pName = document.getElementById("profile-display-name");
-  const pPhone = document.getElementById("profile-display-phone");
-  const pAddr = document.getElementById("profile-display-address");
-  if (pName && profile.name) pName.textContent = profile.name;
-  if (pPhone && profile.phone) pPhone.textContent = profile.phone;
-  if (pAddr && profile.houseNo) pAddr.textContent = `${profile.houseNo}, ${profile.area}`;
+  syncUserProfile();
 }
 
 function saveProfileViewData() {
-  const name = document.getElementById("profile-edit-name").value.trim();
-  const phone = document.getElementById("profile-edit-phone").value.trim();
-  const address = document.getElementById("profile-edit-address").value.trim();
+  const nameInput = document.getElementById("profile-edit-name");
+  const phoneInput = document.getElementById("profile-edit-phone");
+  const addressInput = document.getElementById("profile-edit-address");
+
+  const name = nameInput ? nameInput.value.trim() : "";
+  const phone = phoneInput ? phoneInput.value.trim() : "";
+  const address = addressInput ? addressInput.value.trim() : "";
 
   if (!name || !phone) {
     showToast("Please enter your name and phone number", "error");
     return;
   }
 
-  window.checkoutManager.saveUserProfile({
+  const profileData = {
     name: name,
     phone: phone,
     houseNo: address,
+    address: address,
     area: "",
     landmark: ""
-  });
+  };
 
-  setupProfileData();
-  showToast("Profile details saved! 🍯", "success");
+  if (window.checkoutManager) {
+    window.checkoutManager.saveUserProfile(profileData);
+  }
+  try {
+    localStorage.setItem('beesbee_profile', JSON.stringify(profileData));
+  } catch (e) {}
+
+  syncUserProfile(profileData);
+  showToast("Profile & Name updated everywhere! 🍯", "success");
 }
 
 /**
- * Mobile Sidebar Drawer Navigation
+ * Mobile Sidebar Drawer Navigation with Smooth Transitions
  */
 function openSidebar() {
   const sidebar = document.getElementById("mobile-sidebar");
@@ -1302,10 +1392,21 @@ function closeSidebar() {
   if (sidebar) {
     setTimeout(() => {
       sidebar.classList.add("pointer-events-none");
-    }, 320);
+    }, 280);
   }
   document.body.style.overflow = "";
 }
+
+// Global outside-click dismiss for sidebar
+document.addEventListener("click", (e) => {
+  const sidebar = document.getElementById("mobile-sidebar");
+  const panel = document.getElementById("mobile-sidebar-panel");
+  if (sidebar && panel && !sidebar.classList.contains("pointer-events-none")) {
+    if (!panel.contains(e.target) && !e.target.closest('[onclick*="openSidebar"]')) {
+      closeSidebar();
+    }
+  }
+});
 
 /**
  * Search Modal
@@ -1407,36 +1508,12 @@ function closeNotificationsModal() {
 }
 
 /**
- * Wishlist Modal
- */
-function openWishlistModal() {
-  const modal = document.getElementById("wishlist-modal");
-  if (modal) {
-    modal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-    pushHistoryState({ modal: 'wishlist-modal' });
-  }
-}
-
-function closeWishlistModal() {
-  const modal = document.getElementById("wishlist-modal");
-  if (modal) modal.classList.add("hidden");
-  document.body.style.overflow = "";
-}
-
-/**
  * Addresses Modal
  */
 function openAddressesModal() {
   const modal = document.getElementById("addresses-modal");
   if (modal) {
-    const profile = window.checkoutManager.getSavedProfile();
-    const nameEl = document.getElementById("saved-address-name-display");
-    const addrEl = document.getElementById("saved-address-details-display");
-    if (profile && profile.name) {
-      if (nameEl) nameEl.textContent = profile.name;
-      if (addrEl && profile.houseNo) addrEl.textContent = `${profile.houseNo}, ${profile.area || ''}`;
-    }
+    syncUserProfile();
     modal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
     pushHistoryState({ modal: 'addresses-modal' });
@@ -1450,22 +1527,259 @@ function closeAddressesModal() {
 }
 
 /**
- * Rewards Modal
+ * ========================================================
+ * REAL WISHLIST SYSTEM (Persistent with LocalStorage)
+ * ========================================================
  */
-function openRewardsModal() {
-  const modal = document.getElementById("rewards-modal");
-  if (modal) {
-    modal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-    pushHistoryState({ modal: 'rewards-modal' });
+function getWishlist() {
+  try {
+    const raw = localStorage.getItem('beesbee_wishlist');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
   }
 }
 
-function closeRewardsModal() {
-  const modal = document.getElementById("rewards-modal");
+function saveWishlist(items) {
+  try {
+    localStorage.setItem('beesbee_wishlist', JSON.stringify(items));
+  } catch (e) {}
+  updateWishlistBadges();
+}
+
+function isWishlisted(size) {
+  const list = getWishlist();
+  return list.includes(size);
+}
+
+function toggleWishlist(size, event) {
+  if (event) {
+    event.stopPropagation();
+    if (typeof event.preventDefault === 'function') event.preventDefault();
+  }
+  let list = getWishlist();
+  let added = false;
+  if (list.includes(size)) {
+    list = list.filter(s => s !== size);
+    added = false;
+  } else {
+    list.push(size);
+    added = true;
+  }
+  saveWishlist(list);
+
+  // Update heart buttons across home, shop, and modal
+  updateWishlistButtonsUI(size, added);
+
+  // If wishlist modal is open, re-render it
+  const wishlistModal = document.getElementById("wishlist-modal");
+  if (wishlistModal && !wishlistModal.classList.contains("hidden")) {
+    renderWishlistModal();
+  }
+
+  if (added) {
+    showToast(`Pure Honey (${size}) added to Wishlist! ❤️`, "success");
+  } else {
+    showToast(`Pure Honey (${size}) removed from Wishlist.`, "info");
+  }
+}
+
+function updateWishlistButtonsUI(size, added) {
+  const btns = document.querySelectorAll(`.wishlist-btn[data-size="${size}"]`);
+  btns.forEach(btn => {
+    if (added) {
+      btn.classList.add("active");
+      const svg = btn.querySelector("svg");
+      if (svg) {
+        svg.classList.remove("text-stone-400");
+        svg.classList.add("text-rose-500", "fill-rose-500");
+        svg.setAttribute("fill", "#e11d48");
+      }
+    } else {
+      btn.classList.remove("active");
+      const svg = btn.querySelector("svg");
+      if (svg) {
+        svg.classList.add("text-stone-400");
+        svg.classList.remove("text-rose-500", "fill-rose-500");
+        svg.setAttribute("fill", "none");
+      }
+    }
+  });
+}
+
+function updateWishlistBadges() {
+  const list = getWishlist();
+  const count = list.length;
+  
+  const headerBadge = document.getElementById("wishlist-header-badge");
+  if (headerBadge) {
+    if (count > 0) {
+      headerBadge.textContent = count;
+      headerBadge.classList.remove("hidden");
+    } else {
+      headerBadge.classList.add("hidden");
+    }
+  }
+
+  const sidebarBadge = document.getElementById("wishlist-sidebar-badge");
+  if (sidebarBadge) {
+    if (count > 0) {
+      sidebarBadge.textContent = count;
+      sidebarBadge.classList.remove("hidden");
+    } else {
+      sidebarBadge.classList.add("hidden");
+    }
+  }
+}
+
+function renderWishlistModal() {
+  const container = document.getElementById("wishlist-items-container");
+  if (!container) return;
+
+  const list = getWishlist();
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="py-10 text-center space-y-3">
+        <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto text-2xl">
+          🤍
+        </div>
+        <h4 class="font-bold text-sm text-stone-900">Your Wishlist is Empty</h4>
+        <p class="text-xs text-stone-500 max-w-xs mx-auto">Explore our natural honey jars and tap the heart icon to save your favorites.</p>
+        <button onclick="closeWishlistModal(); switchView('shop');" class="mt-3 px-5 py-2.5 bg-[#1B4332] text-white text-xs font-bold rounded-xl shadow-xs active:scale-95 transition-transform">
+          Explore Honey Jars →
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  const allSizes = window.BEESBEE_PRODUCTS && window.BEESBEE_PRODUCTS[0] ? window.BEESBEE_PRODUCTS[0].sizes : [];
+  
+  container.innerHTML = list.map(size => {
+    const item = allSizes.find(s => s.size === size) || {
+      size: size,
+      price: size === '1kg' ? 649 : (size === '2kg' ? 1199 : 349),
+      originalPrice: size === '1kg' ? 749 : 399,
+      image: `assets/images/jar_${size}.png`
+    };
+
+    return `
+      <div class="flex items-center justify-between p-3 bg-stone-50 rounded-2xl border border-stone-200/70">
+        <div class="flex items-center gap-3">
+          <img src="${item.image}" alt="BeesBee Honey ${item.size}" class="w-12 h-12 object-contain" onerror="this.src='assets/images/jar_${item.size}.png'" />
+          <div>
+            <div class="font-bold text-xs text-stone-900">BeesBee Pure Honey (${item.size})</div>
+            <div class="text-[11px] text-amber-800 font-bold">₹${item.price} <span class="text-[10px] text-stone-400 line-through">₹${item.originalPrice}</span></div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="handleAddToCart('${item.size}'); closeWishlistModal(); openCartDrawer();" class="bg-[#1B4332] hover:bg-[#122E22] text-white text-[10px] font-bold py-1.5 px-3 rounded-xl shadow-xs active:scale-95 transition-transform">
+            + Add to Cart
+          </button>
+          <button onclick="toggleWishlist('${item.size}')" class="p-1.5 text-stone-400 hover:text-rose-500 transition-colors" title="Remove">
+            ✕
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openWishlistModal() {
+  const modal = document.getElementById("wishlist-modal");
+  if (modal) {
+    renderWishlistModal();
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    pushHistoryState({ modal: 'wishlist-modal' });
+  }
+}
+
+function closeWishlistModal() {
+  const modal = document.getElementById("wishlist-modal");
   if (modal) modal.classList.add("hidden");
   document.body.style.overflow = "";
 }
+
+/**
+ * ========================================================
+ * INTERACTIVE OFFERS CATEGORY FILTER
+ * ========================================================
+ */
+function filterOffersCategory(category, btnEl) {
+  const pills = document.querySelectorAll("#offer-filter-pills .offer-pill");
+  pills.forEach(p => {
+    p.classList.remove("active", "bg-[#1B4332]", "text-white", "shadow-xs");
+    p.classList.add("bg-white", "text-stone-700", "border", "border-stone-200");
+  });
+
+  if (btnEl) {
+    btnEl.classList.add("active", "bg-[#1B4332]", "text-white", "shadow-xs");
+    btnEl.classList.remove("bg-white", "text-stone-700", "border", "border-stone-200");
+  }
+
+  const cards = document.querySelectorAll(".offer-card");
+  cards.forEach(card => {
+    const cats = card.getAttribute("data-offer-cat") || "";
+    if (category === "all" || cats.includes(category)) {
+      card.classList.remove("hidden");
+    } else {
+      card.classList.add("hidden");
+    }
+  });
+}
+
+/**
+ * ========================================================
+ * PROPER PWA INSTALL MODAL & TRIGGER
+ * ========================================================
+ */
+function openPWAInstallModal() {
+  const modal = document.getElementById("pwa-install-modal");
+  if (modal) {
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    pushHistoryState({ modal: 'pwa-install-modal' });
+  }
+}
+
+function closePWAInstallModal() {
+  const modal = document.getElementById("pwa-install-modal");
+  if (modal) modal.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+function executePWAInstall() {
+  if (deferredPWAInstallPrompt) {
+    deferredPWAInstallPrompt.prompt();
+    deferredPWAInstallPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        showToast("Installing BeesBee App! 🍯", "success");
+      }
+      deferredPWAInstallPrompt = null;
+      closePWAInstallModal();
+    });
+  } else {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+      showToast("To install on iOS: Tap the Share icon 📤 and choose 'Add to Home Screen' ➕", "info");
+    } else {
+      showToast("To install: Tap the 3-dot menu (⋮) in Chrome and select 'Install App' or 'Add to Home Screen'.", "info");
+    }
+    closePWAInstallModal();
+  }
+}
+
+// Override triggerPWAInstall to use the elegant in-app modal
+function triggerPWAInstall() {
+  openPWAInstallModal();
+}
+
+// Dummy points rewards modal removed - safe stubs
+function openRewardsModal() {
+  showToast("Rewards are automatically applied on WhatsApp orders! 🍯", "info");
+}
+function closeRewardsModal() {}
 
 /**
  * Referral Sharing Handler
@@ -1518,3 +1832,19 @@ function setupEventListeners() {
     renderOrdersListView();
   });
 }
+
+// Global window functions exposure
+window.syncUserProfile = syncUserProfile;
+window.toggleWishlist = toggleWishlist;
+window.isWishlisted = isWishlisted;
+window.openWishlistModal = openWishlistModal;
+window.closeWishlistModal = closeWishlistModal;
+window.filterOffersCategory = filterOffersCategory;
+window.openPWAInstallModal = openPWAInstallModal;
+window.closePWAInstallModal = closePWAInstallModal;
+window.executePWAInstall = executePWAInstall;
+window.triggerPWAInstall = triggerPWAInstall;
+window.openRewardsModal = openRewardsModal;
+window.closeRewardsModal = closeRewardsModal;
+window.openAddressesModal = openAddressesModal;
+window.closeAddressesModal = closeAddressesModal;
